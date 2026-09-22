@@ -1,0 +1,9 @@
+{
+  "repositoryName": "sweet-day-goods",
+  "routes": [
+    {
+      "type": "home",
+      "path": "/"
+    }
+  ]
+}
