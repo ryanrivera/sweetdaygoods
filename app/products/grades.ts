@@ -9,4 +9,5 @@ export const GRADE_OPTIONS = [
 	"6th Grade",
 	"7th Grade",
 	"8th Grade",
+	"Staff",
 ] as const;
