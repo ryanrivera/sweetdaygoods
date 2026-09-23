@@ -144,7 +144,7 @@ export default function SpiritShirtOrder() {
               className="relative overflow-hidden rounded-xl flex items-center justify-center"
               style={{
                 backgroundColor: photo.pad ? "#e8f0eb" : "#d4e8da",
-                aspectRatio: photo.pad ? "4/3" : "3/4",
+                aspectRatio: "1/1",
               }}
             >
               <Image
@@ -180,7 +180,7 @@ export default function SpiritShirtOrder() {
                   onClick={() => setActivePhoto(i)}
                   className="relative overflow-hidden rounded-lg transition-all duration-200 flex items-center justify-center"
                   style={{
-                    aspectRatio: "4/3",
+                    aspectRatio: "1/1",
                     backgroundColor: p.pad ? "#e8f0eb" : "#d4e8da",
                     outline:
                       activePhoto === i

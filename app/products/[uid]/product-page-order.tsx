@@ -123,7 +123,7 @@ export default function ProductPageOrder({
 						{photo && (
 							<div
 								className="relative overflow-hidden rounded-xl"
-								style={{ backgroundColor: "#d4e8da", aspectRatio: "3/4" }}
+								style={{ backgroundColor: "#d4e8da", aspectRatio: "1/1" }}
 							>
 								<Image
 									src={photo.image.url}
@@ -144,7 +144,7 @@ export default function ProductPageOrder({
 										onClick={() => setActivePhoto(i)}
 										className="relative overflow-hidden rounded-lg transition-all duration-200"
 										style={{
-											aspectRatio: "4/3",
+											aspectRatio: "1/1",
 											backgroundColor: "#d4e8da",
 											outline:
 												activePhoto === i
