@@ -13,6 +13,9 @@ type CheckoutItemInput = {
 
 const MAX_QUANTITY_PER_LINE = 20;
 const MAX_TEXT_FIELD_LENGTH = 200;
+// Session-level metadata gets two keys per line item; Stripe caps a session
+// at 50 metadata keys, so this keeps every order comfortably under that.
+const MAX_ITEMS_PER_ORDER = 20;
 
 export async function POST(request: NextRequest) {
 	if (!process.env.STRIPE_SECRET_KEY) {
@@ -27,6 +30,9 @@ export async function POST(request: NextRequest) {
 
 	if (!Array.isArray(rawItems) || rawItems.length === 0) {
 		return NextResponse.json({ error: "Cart is empty." }, { status: 400 });
+	}
+	if (rawItems.length > MAX_ITEMS_PER_ORDER) {
+		return NextResponse.json({ error: "Too many items in cart." }, { status: 400 });
 	}
 
 	const items: {
@@ -125,6 +131,18 @@ export async function POST(request: NextRequest) {
 		},
 	);
 
+	// Also surface student/grade as session-level metadata so it's visible
+	// directly on the Payment page in the Stripe Dashboard, instead of only
+	// on the ad-hoc Product object created for each line item.
+	const metadata: Record<string, string> =
+		items.length === 1
+			? { studentName: items[0].studentName, grade: items[0].grade }
+			: items.reduce<Record<string, string>>((acc, item, i) => {
+					acc[`studentName_${i + 1}`] = item.studentName;
+					acc[`grade_${i + 1}`] = item.grade;
+					return acc;
+				}, {});
+
 	const referer = request.headers.get("referer");
 	const returnPath = referer
 		? new URL(referer).pathname
@@ -136,6 +154,8 @@ export async function POST(request: NextRequest) {
 		const session = await stripe.checkout.sessions.create({
 			mode: "payment",
 			line_items,
+			metadata,
+			payment_intent_data: { metadata },
 			success_url: `${request.nextUrl.origin}${returnPath}?checkout=success`,
 			cancel_url: `${request.nextUrl.origin}${returnPath}?checkout=cancelled`,
 		});
