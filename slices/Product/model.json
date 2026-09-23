@@ -1,0 +1,16 @@
+{
+  "description": "Product",
+  "id": "product",
+  "name": "Product",
+  "type": "SharedSlice",
+  "variations": [
+    {
+      "description": "Default",
+      "docURL": "...",
+      "id": "default",
+      "imageUrl": "",
+      "name": "Default",
+      "version": "initial"
+    }
+  ]
+}

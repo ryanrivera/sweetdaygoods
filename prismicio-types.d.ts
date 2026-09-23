@@ -117,7 +117,263 @@ interface HomeDocumentData {
  */
 export type HomeDocument<Lang extends string = string> = prismic.PrismicDocumentWithoutUID<Simplify<HomeDocumentData>, "home", Lang>;
 
-export type AllDocumentTypes = HomeDocument;
+type ProductDocumentDataSlicesSlice = ProductSlice
+
+/**
+ * Content for Product documents
+ */
+interface ProductDocumentData {
+	/**
+	 * `slices` field in *Product*
+	 *
+	 * - **Field Type**: Slice Zone
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: product.slices[]
+	 * - **Tab**: Main
+	 * - **Documentation**: https://prismic.io/docs/slices
+	 */
+	slices: prismic.SliceZone<ProductDocumentDataSlicesSlice>;
+}
+
+/**
+ * Product document from Prismic
+ *
+ * - **API ID**: `product`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type ProductDocument<Lang extends string = string> = prismic.PrismicDocumentWithUID<Simplify<ProductDocumentData>, "product", Lang>;
+
+/**
+ * Item in *Product Page → Images*
+ */
+export interface ProductPageDocumentDataImagesItem {
+	/**
+	 * Image field in *Product Page → Images*
+	 *
+	 * - **Field Type**: Image
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: product_page.images[].image
+	 * - **Documentation**: https://prismic.io/docs/fields/image
+	 */
+	image: prismic.ImageField<never>;
+}
+
+type ProductPageDocumentDataSlicesSlice = SizesSlice
+
+/**
+ * Content for Product Page documents
+ */
+interface ProductPageDocumentData {
+	/**
+	 * Eyebrow field in *Product Page*
+	 *
+	 * - **Field Type**: Text
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: product_page.eyebrow
+	 * - **Tab**: Main
+	 * - **Documentation**: https://prismic.io/docs/fields/text
+	 */
+	eyebrow: prismic.KeyTextField;
+	
+	/**
+	 * Name field in *Product Page*
+	 *
+	 * - **Field Type**: Text
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: product_page.name
+	 * - **Tab**: Main
+	 * - **Documentation**: https://prismic.io/docs/fields/text
+	 */
+	name: prismic.KeyTextField;
+	
+	/**
+	 * Description field in *Product Page*
+	 *
+	 * - **Field Type**: Rich Text
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: product_page.description
+	 * - **Tab**: Main
+	 * - **Documentation**: https://prismic.io/docs/fields/rich-text
+	 */
+	description: prismic.RichTextField;
+	
+	/**
+	 * Price field in *Product Page*
+	 *
+	 * - **Field Type**: Number
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: product_page.price
+	 * - **Tab**: Main
+	 * - **Documentation**: https://prismic.io/docs/fields/number
+	 */
+	price: prismic.NumberField;
+	
+	/**
+	 * Images field in *Product Page*
+	 *
+	 * - **Field Type**: Group
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: product_page.images[]
+	 * - **Tab**: Main
+	 * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+	 */
+	images: prismic.GroupField<Simplify<ProductPageDocumentDataImagesItem>>;
+	
+	/**
+	 * Disclaimer field in *Product Page*
+	 *
+	 * - **Field Type**: Rich Text
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: product_page.disclaimer
+	 * - **Tab**: Main
+	 * - **Documentation**: https://prismic.io/docs/fields/rich-text
+	 */
+	disclaimer: prismic.RichTextField;
+	
+	/**
+	 * Slice Zone field in *Product Page*
+	 *
+	 * - **Field Type**: Slice Zone
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: product_page.slices[]
+	 * - **Tab**: Main
+	 * - **Documentation**: https://prismic.io/docs/slices
+	 */
+	slices: prismic.SliceZone<ProductPageDocumentDataSlicesSlice>;/**
+	 * Meta Title field in *Product Page*
+	 *
+	 * - **Field Type**: Text
+	 * - **Placeholder**: A title of the page used for social media and search engines
+	 * - **API ID Path**: product_page.meta_title
+	 * - **Tab**: SEO & Metadata
+	 * - **Documentation**: https://prismic.io/docs/fields/text
+	 */
+	meta_title: prismic.KeyTextField;
+	
+	/**
+	 * Meta Description field in *Product Page*
+	 *
+	 * - **Field Type**: Text
+	 * - **Placeholder**: A brief summary of the page
+	 * - **API ID Path**: product_page.meta_description
+	 * - **Tab**: SEO & Metadata
+	 * - **Documentation**: https://prismic.io/docs/fields/text
+	 */
+	meta_description: prismic.KeyTextField;
+	
+	/**
+	 * Meta Image field in *Product Page*
+	 *
+	 * - **Field Type**: Image
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: product_page.meta_image
+	 * - **Tab**: SEO & Metadata
+	 * - **Documentation**: https://prismic.io/docs/fields/image
+	 */
+	meta_image: prismic.ImageField<never>;
+}
+
+/**
+ * Product Page document from Prismic
+ *
+ * - **API ID**: `product_page`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type ProductPageDocument<Lang extends string = string> = prismic.PrismicDocumentWithUID<Simplify<ProductPageDocumentData>, "product_page", Lang>;
+
+export type AllDocumentTypes = HomeDocument | ProductDocument | ProductPageDocument;
+
+/**
+ * Default variation for Product Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type ProductSliceDefault = prismic.SharedSliceVariation<"default", Record<string, never>, never>;
+
+/**
+ * Slice variation for *Product*
+ */
+type ProductSliceVariation = ProductSliceDefault
+
+/**
+ * Product Shared Slice
+ *
+ * - **API ID**: `product`
+ * - **Description**: Product
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type ProductSlice = prismic.SharedSlice<"product", ProductSliceVariation>;
+
+/**
+ * Item in *Sizes → Default → Primary → Sizes*
+ */
+export interface SizesSliceDefaultPrimarySizesItem {
+	/**
+	 * Size field in *Sizes → Default → Primary → Sizes*
+	 *
+	 * - **Field Type**: Text
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: sizes.default.primary.sizes[].size
+	 * - **Documentation**: https://prismic.io/docs/fields/text
+	 */
+	size: prismic.KeyTextField;
+}
+
+/**
+ * Primary content in *Sizes → Default → Primary*
+ */
+export interface SizesSliceDefaultPrimary {
+	/**
+	 * Name field in *Sizes → Default → Primary*
+	 *
+	 * - **Field Type**: Text
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: sizes.default.primary.name
+	 * - **Documentation**: https://prismic.io/docs/fields/text
+	 */
+	name: prismic.KeyTextField;
+	
+	/**
+	 * Sizes field in *Sizes → Default → Primary*
+	 *
+	 * - **Field Type**: Group
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: sizes.default.primary.sizes[]
+	 * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+	 */
+	sizes: prismic.GroupField<Simplify<SizesSliceDefaultPrimarySizesItem>>;
+}
+
+/**
+ * Default variation for Sizes Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type SizesSliceDefault = prismic.SharedSliceVariation<"default", Simplify<SizesSliceDefaultPrimary>, never>;
+
+/**
+ * Slice variation for *Sizes*
+ */
+type SizesSliceVariation = SizesSliceDefault
+
+/**
+ * Sizes Shared Slice
+ *
+ * - **API ID**: `sizes`
+ * - **Description**: Sizes
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type SizesSlice = prismic.SharedSlice<"sizes", SizesSliceVariation>;
 
 declare module "@prismicio/client" {
 	interface CreateClient {
@@ -137,7 +393,22 @@ declare module "@prismicio/client" {
 			HomeDocument,
 			HomeDocumentData,
 			HomeDocumentDataSlicesSlice,
-			AllDocumentTypes
+			ProductDocument,
+			ProductDocumentData,
+			ProductDocumentDataSlicesSlice,
+			ProductPageDocument,
+			ProductPageDocumentData,
+			ProductPageDocumentDataImagesItem,
+			ProductPageDocumentDataSlicesSlice,
+			AllDocumentTypes,
+			ProductSlice,
+			ProductSliceVariation,
+			ProductSliceDefault,
+			SizesSlice,
+			SizesSliceDefaultPrimarySizesItem,
+			SizesSliceDefaultPrimary,
+			SizesSliceVariation,
+			SizesSliceDefault
 		}
 	}
 }

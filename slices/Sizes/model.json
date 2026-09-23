@@ -1,0 +1,41 @@
+{
+  "description": "Sizes",
+  "id": "sizes",
+  "name": "Sizes",
+  "type": "SharedSlice",
+  "variations": [
+    {
+      "description": "Default",
+      "docURL": "...",
+      "id": "default",
+      "imageUrl": "",
+      "name": "Default",
+      "primary": {
+        "name": {
+          "config": {
+            "label": "Name",
+            "placeholder": ""
+          },
+          "type": "Text"
+        },
+        "sizes": {
+          "config": {
+            "fields": {
+              "size": {
+                "config": {
+                  "label": "Size",
+                  "placeholder": ""
+                },
+                "type": "Text"
+              }
+            },
+            "label": "Sizes",
+            "repeat": true
+          },
+          "type": "Group"
+        }
+      },
+      "version": "initial"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "format": "custom",
+  "id": "product",
+  "json": {
+    "Main": {
+      "uid": {
+        "config": {
+          "label": "UID"
+        },
+        "type": "UID"
+      },
+      "slices": {
+        "config": {
+          "choices": {
+            "product": {
+              "type": "SharedSlice"
+            }
+          }
+        },
+        "type": "Slices"
+      }
+    }
+  },
+  "label": "Product",
+  "repeatable": true,
+  "status": true
+}
