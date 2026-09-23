@@ -12,7 +12,12 @@ type CheckoutItemInput = {
 };
 
 const MAX_QUANTITY_PER_LINE = 20;
-const MAX_TEXT_FIELD_LENGTH = 200;
+// Student name/grade get folded into the Stripe line item's product name
+// (capped at 250 chars by Stripe), so each field is kept well under that.
+const MAX_TEXT_FIELD_LENGTH = 60;
+// Final safety net in case a long product name pushes the combined string
+// past Stripe's 250-char product name limit.
+const MAX_PRODUCT_NAME_LENGTH = 250;
 // Session-level metadata gets two keys per line item; Stripe caps a session
 // at 50 metadata keys, so this keeps every order comfortably under that.
 const MAX_ITEMS_PER_ORDER = 20;
@@ -107,9 +112,13 @@ export async function POST(request: NextRequest) {
 			const page = pagesByUid.get(item.uid);
 			if (!page) throw new Error(`Unknown product: ${item.uid}`);
 
-			const name = page.data.name
+			const baseName = page.data.name
 				? `${page.data.name}${item.size ? ` (${item.size})` : ""}`
 				: item.uid;
+			const name = `${baseName} — ${item.studentName}, Grade ${item.grade}`.slice(
+				0,
+				MAX_PRODUCT_NAME_LENGTH,
+			);
 			const image = page.data.images.find((img) => isFilled.image(img.image))
 				?.image;
 
