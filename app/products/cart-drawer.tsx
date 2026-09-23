@@ -39,6 +39,8 @@ export default function CartDrawer() {
 					items: cart.items.map((item) => ({
 						uid: item.uid,
 						size: item.size,
+						studentName: item.studentName,
+						grade: item.grade,
 						quantity: item.quantity,
 					})),
 				}),
@@ -150,6 +152,12 @@ export default function CartDrawer() {
 										Size: {item.size}
 									</p>
 								)}
+								<p
+									style={{ fontFamily: "var(--font-body)", color: "var(--color-muted-text)" }}
+									className="text-xs"
+								>
+									{item.studentName} — Grade {item.grade}
+								</p>
 
 								<div className="flex items-center justify-between mt-2">
 									<div

@@ -6,10 +6,13 @@ import { createClient } from "@/prismicio";
 type CheckoutItemInput = {
 	uid: unknown;
 	size: unknown;
+	studentName: unknown;
+	grade: unknown;
 	quantity: unknown;
 };
 
 const MAX_QUANTITY_PER_LINE = 20;
+const MAX_TEXT_FIELD_LENGTH = 200;
 
 export async function POST(request: NextRequest) {
 	if (!process.env.STRIPE_SECRET_KEY) {
@@ -26,10 +29,18 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json({ error: "Cart is empty." }, { status: 400 });
 	}
 
-	const items: { uid: string; size: string | null; quantity: number }[] = [];
+	const items: {
+		uid: string;
+		size: string | null;
+		studentName: string;
+		grade: string;
+		quantity: number;
+	}[] = [];
 	for (const raw of rawItems as CheckoutItemInput[]) {
 		const uid = raw?.uid;
 		const size = raw?.size;
+		const studentName = raw?.studentName;
+		const grade = raw?.grade;
 		const quantity = raw?.quantity;
 
 		if (typeof uid !== "string" || !uid) {
@@ -37,6 +48,20 @@ export async function POST(request: NextRequest) {
 		}
 		if (size !== null && typeof size !== "string") {
 			return NextResponse.json({ error: "Invalid cart item." }, { status: 400 });
+		}
+		if (
+			typeof studentName !== "string" ||
+			!studentName.trim() ||
+			studentName.length > MAX_TEXT_FIELD_LENGTH
+		) {
+			return NextResponse.json({ error: "Invalid student name." }, { status: 400 });
+		}
+		if (
+			typeof grade !== "string" ||
+			!grade.trim() ||
+			grade.length > MAX_TEXT_FIELD_LENGTH
+		) {
+			return NextResponse.json({ error: "Invalid grade." }, { status: 400 });
 		}
 		if (
 			typeof quantity !== "number" ||
@@ -47,7 +72,13 @@ export async function POST(request: NextRequest) {
 			return NextResponse.json({ error: "Invalid item quantity." }, { status: 400 });
 		}
 
-		items.push({ uid, size, quantity });
+		items.push({
+			uid,
+			size,
+			studentName: studentName.trim(),
+			grade: grade.trim(),
+			quantity,
+		});
 	}
 
 	const client = createClient();
@@ -84,6 +115,10 @@ export async function POST(request: NextRequest) {
 					product_data: {
 						name,
 						images: image && isFilled.image(image) ? [image.url] : undefined,
+						metadata: {
+							studentName: item.studentName,
+							grade: item.grade,
+						},
 					},
 				},
 			};

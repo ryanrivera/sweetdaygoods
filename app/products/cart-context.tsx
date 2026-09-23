@@ -16,6 +16,8 @@ export type CartItem = {
 	uid: string;
 	name: string;
 	size: string | null;
+	studentName: string;
+	grade: string;
 	unitPrice: number;
 	quantity: number;
 	image: { url: string; alt: string } | null;
@@ -38,8 +40,13 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-function itemKey(uid: string, size: string | null) {
-	return `${uid}::${size ?? ""}`;
+function itemKey(
+	uid: string,
+	size: string | null,
+	studentName: string,
+	grade: string,
+) {
+	return `${uid}::${size ?? ""}::${studentName}::${grade}`;
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
@@ -71,7 +78,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 	}, [items, hydrated]);
 
 	const addItem = useCallback((input: AddItemInput) => {
-		const key = itemKey(input.uid, input.size);
+		const key = itemKey(input.uid, input.size, input.studentName, input.grade);
 		setItems((prev) => {
 			const existing = prev.find((item) => item.key === key);
 			if (existing) {

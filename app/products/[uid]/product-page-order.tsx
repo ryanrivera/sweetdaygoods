@@ -36,9 +36,12 @@ export default function ProductPageOrder({
 	const cart = useCart();
 	const [activePhoto, setActivePhoto] = useState(0);
 	const [selectedSize, setSelectedSize] = useState<string | null>(null);
+	const [studentName, setStudentName] = useState("");
+	const [grade, setGrade] = useState("");
 	const [quantity, setQuantity] = useState(1);
 	const [orderState, setOrderState] = useState<OrderState>("idle");
 	const [sizeError, setSizeError] = useState(false);
+	const [studentInfoError, setStudentInfoError] = useState(false);
 
 	const photo = images[activePhoto];
 
@@ -48,10 +51,19 @@ export default function ProductPageOrder({
 			return;
 		}
 		setSizeError(false);
+
+		if (!studentName.trim() || !grade.trim()) {
+			setStudentInfoError(true);
+			return;
+		}
+		setStudentInfoError(false);
+
 		cart.addItem({
 			uid: page.uid,
 			name: data.name ?? "",
 			size: selectedSize,
+			studentName: studentName.trim(),
+			grade: grade.trim(),
 			unitPrice: price,
 			quantity,
 			image: photo ? { url: photo.image.url, alt: photo.image.alt || data.name || "" } : null,
@@ -272,6 +284,54 @@ export default function ProductPageOrder({
 								)}
 							</div>
 						)}
+
+						{/* Student info */}
+						<div>
+							<p
+								style={{ fontFamily: "var(--font-heading)", color: "var(--color-forest)" }}
+								className="text-sm font-bold uppercase tracking-wide mb-3"
+							>
+								Student Info
+							</p>
+							<div className="flex flex-col gap-3">
+								<input
+									type="text"
+									value={studentName}
+									onChange={(e) => {
+										setStudentName(e.target.value);
+										setStudentInfoError(false);
+									}}
+									placeholder="Student Name"
+									className="w-full px-3 py-2 rounded-lg text-sm outline-none"
+									style={{
+										fontFamily: "var(--font-body)",
+										color: "var(--color-forest)",
+										border: "1px solid var(--color-border)",
+									}}
+								/>
+								<input
+									type="text"
+									value={grade}
+									onChange={(e) => {
+										setGrade(e.target.value);
+										setStudentInfoError(false);
+									}}
+									placeholder="Grade"
+									className="w-full px-3 py-2 rounded-lg text-sm outline-none"
+									style={{
+										fontFamily: "var(--font-body)",
+										color: "var(--color-forest)",
+										border: "1px solid var(--color-border)",
+									}}
+								/>
+							</div>
+
+							{studentInfoError && (
+								<p style={{ color: "#b91c1c", fontFamily: "var(--font-body)" }} className="text-sm mt-3">
+									Please enter the student&apos;s name and grade before ordering.
+								</p>
+							)}
+						</div>
 
 						{/* Quantity */}
 						<div>
