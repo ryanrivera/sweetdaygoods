@@ -3,8 +3,11 @@
   "configurations": [
     {
       "name": "sweetdaygoods-dev",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeExecutable": "/bin/bash",
+      "runtimeArgs": [
+        "-lc",
+        "PATH=\"/Users/ryanrivera/.nvm/versions/node/v24.21.0/bin:$PATH\" npm run dev"
+      ],
       "port": 3000
     }
   ]
