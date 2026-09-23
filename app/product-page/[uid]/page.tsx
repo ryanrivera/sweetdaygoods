@@ -1,21 +1,7 @@
-import { Arvo, Roboto } from "next/font/google";
 import type { Metadata } from "next";
 import { asText, isFilled } from "@prismicio/client";
 import { createClient } from "@/prismicio";
 import ProductPageOrder from "./product-page-order";
-import "./product-page.css";
-
-const arvo = Arvo({
-	subsets: ["latin"],
-	weight: ["400", "700"],
-	variable: "--font-arvo",
-});
-
-const roboto = Roboto({
-	subsets: ["latin"],
-	weight: ["300", "400", "500"],
-	variable: "--font-roboto",
-});
 
 export async function generateMetadata({
 	params,
@@ -48,9 +34,5 @@ export default async function Page({
 	const client = createClient();
 	const page = await client.getByUID("product_page", uid);
 
-	return (
-		<div className={`${arvo.variable} ${roboto.variable}`}>
-			<ProductPageOrder page={page} />
-		</div>
-	);
+	return <ProductPageOrder page={page} />;
 }

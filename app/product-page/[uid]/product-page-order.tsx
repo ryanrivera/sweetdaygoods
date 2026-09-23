@@ -10,8 +10,10 @@ import type {
 	SizesSlice,
 } from "@/prismicio-types";
 import type { FilledImageFieldImage } from "@prismicio/client";
+import { useCart } from "../cart-context";
+import CartButton from "../cart-button";
 
-type OrderState = "idle" | "added" | "ordered";
+type OrderState = "idle" | "added";
 
 type FilledImageItem = Omit<ProductPageDocumentDataImagesItem, "image"> & {
 	image: FilledImageFieldImage;
@@ -31,11 +33,14 @@ export default function ProductPageOrder({
 		(slice): slice is SizesSlice => slice.slice_type === "sizes",
 	);
 
+	const cart = useCart();
 	const [activePhoto, setActivePhoto] = useState(0);
 	const [selectedSize, setSelectedSize] = useState<string | null>(null);
 	const [quantity, setQuantity] = useState(1);
 	const [orderState, setOrderState] = useState<OrderState>("idle");
 	const [sizeError, setSizeError] = useState(false);
+
+	const photo = images[activePhoto];
 
 	function handleAddToCart() {
 		if (sizeGroups.length > 0 && !selectedSize) {
@@ -43,25 +48,22 @@ export default function ProductPageOrder({
 			return;
 		}
 		setSizeError(false);
+		cart.addItem({
+			uid: page.uid,
+			name: data.name ?? "",
+			size: selectedSize,
+			unitPrice: price,
+			quantity,
+			image: photo ? { url: photo.image.url, alt: photo.image.alt || data.name || "" } : null,
+		});
 		setOrderState("added");
-	}
-
-	function handlePlaceOrder() {
-		if (sizeGroups.length > 0 && !selectedSize) {
-			setSizeError(true);
-			return;
-		}
-		setSizeError(false);
-		setOrderState("ordered");
+		setTimeout(() => setOrderState("idle"), 1500);
 	}
 
 	function handleSizeSelect(size: string) {
 		setSelectedSize(size);
 		setSizeError(false);
-		if (orderState === "ordered") setOrderState("idle");
 	}
-
-	const photo = images[activePhoto];
 
 	const titleBlock = (
 		<>
@@ -98,7 +100,7 @@ export default function ProductPageOrder({
 			style={{ backgroundColor: "var(--color-cream)" }}
 		>
 			{/* Breadcrumb */}
-			<div className="max-w-5xl mx-auto px-6 py-6">
+			<div className="max-w-5xl mx-auto px-6 py-6 flex items-center justify-between">
 				<p
 					style={{ color: "var(--color-muted-text)", fontFamily: "var(--font-body)" }}
 					className="text-sm"
@@ -106,6 +108,7 @@ export default function ProductPageOrder({
 					Products <span className="mx-1.5">›</span>
 					<span style={{ color: "var(--color-forest)" }}>{data.name}</span>
 				</p>
+				<CartButton />
 			</div>
 
 			{/* Main content */}
@@ -126,6 +129,7 @@ export default function ProductPageOrder({
 									src={photo.image.url}
 									alt={photo.image.alt || `${data.name} — photo ${activePhoto + 1}`}
 									fill
+									priority
 									sizes="(max-width: 768px) 100vw, 600px"
 									style={{ objectFit: "cover" }}
 								/>
@@ -334,47 +338,17 @@ export default function ProductPageOrder({
 						</div>
 
 						{/* CTA */}
-						{orderState === "ordered" ? (
-							<div
-								className="rounded-xl px-6 py-5 text-center"
-								style={{ backgroundColor: "var(--color-forest)", color: "white" }}
-							>
-								<p style={{ fontFamily: "var(--font-heading)" }} className="font-bold text-lg mb-1">
-									Order Placed
-								</p>
-								<p style={{ fontFamily: "var(--font-body)" }} className="text-sm opacity-90">
-									{quantity} × {data.name}
-									{selectedSize ? ` (${selectedSize})` : ""} · Confirmation sent to your
-									email.
-								</p>
-							</div>
-						) : (
-							<div className="flex flex-col gap-3">
-								<button
-									onClick={handlePlaceOrder}
-									className="w-full py-3.5 rounded-lg text-sm font-medium tracking-widest transition-all duration-150 active:scale-[0.98]"
-									style={{
-										backgroundColor: "var(--color-forest)",
-										color: "white",
-										fontFamily: "var(--font-body)",
-									}}
-								>
-									PLACE ORDER — ${(price * quantity).toFixed(2)}
-								</button>
-								<button
-									onClick={handleAddToCart}
-									className="w-full py-3 rounded-lg text-sm font-medium tracking-widest transition-all duration-150 active:scale-[0.98]"
-									style={{
-										backgroundColor: orderState === "added" ? "var(--color-yellow)" : "transparent",
-										color: "var(--color-forest)",
-										border: "1.5px solid var(--color-forest)",
-										fontFamily: "var(--font-body)",
-									}}
-								>
-									{orderState === "added" ? "✓ ADDED TO CART" : "ADD TO CART"}
-								</button>
-							</div>
-						)}
+						<button
+							onClick={handleAddToCart}
+							className="w-full py-3.5 rounded-lg text-sm font-medium tracking-widest transition-all duration-150 active:scale-[0.98]"
+							style={{
+								backgroundColor: orderState === "added" ? "var(--color-yellow)" : "var(--color-forest)",
+								color: orderState === "added" ? "var(--color-forest)" : "white",
+								fontFamily: "var(--font-body)",
+							}}
+						>
+							{orderState === "added" ? "✓ ADDED TO CART" : `ADD TO CART — $${(price * quantity).toFixed(2)}`}
+						</button>
 
 						{/* Disclaimer */}
 						{isFilled.richText(data.disclaimer) && (
