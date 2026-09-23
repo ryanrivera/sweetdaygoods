@@ -63,6 +63,35 @@ export default function ProductPageOrder({
 
 	const photo = images[activePhoto];
 
+	const titleBlock = (
+		<>
+			{data.eyebrow && (
+				<div className="flex items-center gap-2 mb-2">
+					<span
+						className="text-xs font-medium px-2.5 py-1 rounded-full uppercase tracking-wide"
+						style={{
+							backgroundColor: "var(--color-yellow)",
+							color: "var(--color-forest)",
+							fontFamily: "var(--font-body)",
+						}}
+					>
+						{data.eyebrow}
+					</span>
+				</div>
+			)}
+			<h1
+				style={{
+					fontFamily: "var(--font-heading)",
+					color: "var(--color-forest)",
+					lineHeight: 1.2,
+				}}
+				className="text-3xl font-bold"
+			>
+				{data.name}
+			</h1>
+		</>
+	);
+
 	return (
 		<div
 			className="product-page-shell min-h-screen"
@@ -81,10 +110,11 @@ export default function ProductPageOrder({
 
 			{/* Main content */}
 			<main className="max-w-5xl mx-auto px-6 pb-20">
-				<div
-					className="grid gap-12"
-					style={{ gridTemplateColumns: "minmax(0,1fr) minmax(0,420px)" }}
-				>
+				{/* Eyebrow & title — shown above the gallery on mobile only;
+				    a second copy sits atop the details column on md+ */}
+				<div className="mb-6 md:hidden">{titleBlock}</div>
+
+				<div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,420px)] md:gap-12">
 					{/* Photo gallery */}
 					<div className="flex flex-col gap-4">
 						{photo && (
@@ -135,32 +165,11 @@ export default function ProductPageOrder({
 
 					{/* Product details */}
 					<div className="flex flex-col gap-6 pt-1">
-						{/* Eyebrow, title & description */}
+						{/* Eyebrow & title (md+ only; duplicated above the gallery on mobile) */}
+						<div className="hidden md:block">{titleBlock}</div>
+
+						{/* Description */}
 						<div>
-							{data.eyebrow && (
-								<div className="flex items-center gap-2 mb-2">
-									<span
-										className="text-xs font-medium px-2.5 py-1 rounded-full uppercase tracking-wide"
-										style={{
-											backgroundColor: "var(--color-yellow)",
-											color: "var(--color-forest)",
-											fontFamily: "var(--font-body)",
-										}}
-									>
-										{data.eyebrow}
-									</span>
-								</div>
-							)}
-							<h1
-								style={{
-									fontFamily: "var(--font-heading)",
-									color: "var(--color-forest)",
-									lineHeight: 1.2,
-								}}
-								className="text-3xl font-bold mb-3"
-							>
-								{data.name}
-							</h1>
 							<div
 								style={{
 									color: "var(--color-muted-text)",
