@@ -303,11 +303,12 @@ export default function ProductPageOrder({
 										setStudentInfoError(false);
 									}}
 									placeholder="Student Name"
-									className="w-full px-3 py-2 rounded-lg text-sm outline-none"
+									className="w-full px-3 py-2 rounded-lg outline-none"
 									style={{
 										fontFamily: "var(--font-body)",
 										color: "var(--color-forest)",
 										border: "1px solid var(--color-border)",
+										fontSize: 16,
 									}}
 								/>
 								<select
@@ -316,11 +317,12 @@ export default function ProductPageOrder({
 										setGrade(e.target.value);
 										setStudentInfoError(false);
 									}}
-									className="w-full px-3 py-2 rounded-lg text-sm outline-none"
+									className="w-full px-3 py-2 rounded-lg outline-none"
 									style={{
 										fontFamily: "var(--font-body)",
 										color: grade ? "var(--color-forest)" : "var(--color-muted-text)",
 										border: "1px solid var(--color-border)",
+										fontSize: 16,
 									}}
 								>
 									<option value="" disabled>
