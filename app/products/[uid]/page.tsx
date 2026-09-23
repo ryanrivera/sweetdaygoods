@@ -5,7 +5,7 @@ import ProductPageOrder from "./product-page-order";
 
 export async function generateMetadata({
 	params,
-}: PageProps<"/product-page/[uid]">): Promise<Metadata> {
+}: PageProps<"/products/[uid]">): Promise<Metadata> {
 	const { uid } = await params;
 	const client = createClient();
 	const page = await client.getByUID("product_page", uid);
@@ -29,7 +29,7 @@ export async function generateMetadata({
 
 export default async function Page({
 	params,
-}: PageProps<"/product-page/[uid]">) {
+}: PageProps<"/products/[uid]">) {
 	const { uid } = await params;
 	const client = createClient();
 	const page = await client.getByUID("product_page", uid);

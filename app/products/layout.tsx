@@ -18,7 +18,7 @@ const roboto = Roboto({
 
 export default function ProductPageLayout({
 	children,
-}: LayoutProps<"/product-page">) {
+}: LayoutProps<"/products">) {
 	return (
 		<div className={`${arvo.variable} ${roboto.variable}`}>
 			<CartProvider>
