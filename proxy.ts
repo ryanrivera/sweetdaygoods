@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 // Maps a subdomain of sweetdaygoods.com to the product page it should show.
 const SUBDOMAIN_PRODUCTS: Record<string, string> = {
-  "paws-spirit-tshirt": "paws-spirit-t-shirt",
+  "paws-spirit-tshirt": "paws-spirit-tshirt",
 };
 
 export function proxy(request: NextRequest) {
