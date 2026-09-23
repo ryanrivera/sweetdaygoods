@@ -12,6 +12,7 @@ import type {
 import type { FilledImageFieldImage } from "@prismicio/client";
 import { useCart } from "../cart-context";
 import CartButton from "../cart-button";
+import { GRADE_OPTIONS } from "../grades";
 
 type OrderState = "idle" | "added";
 
@@ -309,21 +310,28 @@ export default function ProductPageOrder({
 										border: "1px solid var(--color-border)",
 									}}
 								/>
-								<input
-									type="text"
+								<select
 									value={grade}
 									onChange={(e) => {
 										setGrade(e.target.value);
 										setStudentInfoError(false);
 									}}
-									placeholder="Grade"
 									className="w-full px-3 py-2 rounded-lg text-sm outline-none"
 									style={{
 										fontFamily: "var(--font-body)",
-										color: "var(--color-forest)",
+										color: grade ? "var(--color-forest)" : "var(--color-muted-text)",
 										border: "1px solid var(--color-border)",
 									}}
-								/>
+								>
+									<option value="" disabled>
+										Grade
+									</option>
+									{GRADE_OPTIONS.map((option) => (
+										<option key={option} value={option}>
+											{option}
+										</option>
+									))}
+								</select>
 							</div>
 
 							{studentInfoError && (

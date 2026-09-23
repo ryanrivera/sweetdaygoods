@@ -156,7 +156,7 @@ export default function CartDrawer() {
 									style={{ fontFamily: "var(--font-body)", color: "var(--color-muted-text)" }}
 									className="text-xs"
 								>
-									{item.studentName} — Grade {item.grade}
+									{item.studentName} — {item.grade}
 								</p>
 
 								<div className="flex items-center justify-between mt-2">

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { isFilled } from "@prismicio/client";
 import { createClient } from "@/prismicio";
+import { GRADE_OPTIONS } from "@/app/products/grades";
 
 type CheckoutItemInput = {
 	uid: unknown;
@@ -12,8 +13,8 @@ type CheckoutItemInput = {
 };
 
 const MAX_QUANTITY_PER_LINE = 20;
-// Student name/grade get folded into the Stripe line item's product name
-// (capped at 250 chars by Stripe), so each field is kept well under that.
+// Student name gets folded into the Stripe line item's product name
+// (capped at 250 chars by Stripe), so it's kept well under that.
 const MAX_TEXT_FIELD_LENGTH = 60;
 // Final safety net in case a long product name pushes the combined string
 // past Stripe's 250-char product name limit.
@@ -69,8 +70,7 @@ export async function POST(request: NextRequest) {
 		}
 		if (
 			typeof grade !== "string" ||
-			!grade.trim() ||
-			grade.length > MAX_TEXT_FIELD_LENGTH
+			!(GRADE_OPTIONS as readonly string[]).includes(grade)
 		) {
 			return NextResponse.json({ error: "Invalid grade." }, { status: 400 });
 		}
@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
 			const baseName = page.data.name
 				? `${page.data.name}${item.size ? ` (${item.size})` : ""}`
 				: item.uid;
-			const name = `${baseName} — ${item.studentName}, Grade ${item.grade}`.slice(
+			const name = `${baseName} — ${item.studentName}, ${item.grade}`.slice(
 				0,
 				MAX_PRODUCT_NAME_LENGTH,
 			);
