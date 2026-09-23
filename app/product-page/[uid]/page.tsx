@@ -1,11 +1,56 @@
-import { SliceZone } from "@prismicio/react";
+import { Arvo, Roboto } from "next/font/google";
+import type { Metadata } from "next";
+import { asText, isFilled } from "@prismicio/client";
 import { createClient } from "@/prismicio";
-import { components } from "@/slices";
+import ProductPageOrder from "./product-page-order";
+import "./product-page.css";
 
-export default async function Page({ params }: PageProps<"/product-page/[uid]">) {
+const arvo = Arvo({
+	subsets: ["latin"],
+	weight: ["400", "700"],
+	variable: "--font-arvo",
+});
+
+const roboto = Roboto({
+	subsets: ["latin"],
+	weight: ["300", "400", "500"],
+	variable: "--font-roboto",
+});
+
+export async function generateMetadata({
+	params,
+}: PageProps<"/product-page/[uid]">): Promise<Metadata> {
 	const { uid } = await params;
 	const client = createClient();
 	const page = await client.getByUID("product_page", uid);
 
-	return <SliceZone slices={page.data.slices} components={components} />;
+	const title = page.data.meta_title || page.data.name || undefined;
+	const description =
+		page.data.meta_description || asText(page.data.description) || undefined;
+
+	return {
+		title,
+		description,
+		openGraph: {
+			title: title ?? undefined,
+			description: description ?? undefined,
+			images: isFilled.image(page.data.meta_image)
+				? [{ url: page.data.meta_image.url }]
+				: undefined,
+		},
+	};
+}
+
+export default async function Page({
+	params,
+}: PageProps<"/product-page/[uid]">) {
+	const { uid } = await params;
+	const client = createClient();
+	const page = await client.getByUID("product_page", uid);
+
+	return (
+		<div className={`${arvo.variable} ${roboto.variable}`}>
+			<ProductPageOrder page={page} />
+		</div>
+	);
 }

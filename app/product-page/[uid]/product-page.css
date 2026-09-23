@@ -1,0 +1,9 @@
+.product-page-shell {
+  --font-heading: var(--font-arvo), serif;
+  --font-body: var(--font-roboto), sans-serif;
+  --color-forest: #0f3d27;
+  --color-yellow: #f5c842;
+  --color-cream: #f7faf8;
+  --color-muted-text: #5a6b60;
+  --color-border: #c8d8cc;
+}
