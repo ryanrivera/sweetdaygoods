@@ -105,7 +105,7 @@ export default function ProductPageOrder({
 					style={{ color: "var(--color-muted-text)", fontFamily: "var(--font-body)" }}
 					className="text-sm"
 				>
-					Products <span className="mx-1.5">›</span>
+					St. Columba Catholic School <span className="mx-1.5">›</span>
 					<span style={{ color: "var(--color-forest)" }}>{data.name}</span>
 				</p>
 				<CartButton />
