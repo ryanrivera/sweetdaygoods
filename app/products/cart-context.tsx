@@ -20,6 +20,7 @@ export type CartItem = {
 	grade: string;
 	unitPrice: number;
 	quantity: number;
+	sponsor: boolean;
 	image: { url: string; alt: string } | null;
 };
 
@@ -45,8 +46,9 @@ function itemKey(
 	size: string | null,
 	studentName: string,
 	grade: string,
+	sponsor: boolean,
 ) {
-	return `${uid}::${size ?? ""}::${studentName}::${grade}`;
+	return `${uid}::${size ?? ""}::${studentName}::${grade}::${sponsor}`;
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
@@ -78,7 +80,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 	}, [items, hydrated]);
 
 	const addItem = useCallback((input: AddItemInput) => {
-		const key = itemKey(input.uid, input.size, input.studentName, input.grade);
+		const key = itemKey(input.uid, input.size, input.studentName, input.grade, input.sponsor);
 		setItems((prev) => {
 			const existing = prev.find((item) => item.key === key);
 			if (existing) {
@@ -115,7 +117,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 		() => ({
 			itemCount: items.reduce((sum, item) => sum + item.quantity, 0),
 			subtotal: items.reduce(
-				(sum, item) => sum + item.unitPrice * item.quantity,
+				(sum, item) =>
+					sum + item.unitPrice * item.quantity + (item.sponsor ? item.unitPrice : 0),
 				0,
 			),
 		}),

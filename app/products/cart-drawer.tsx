@@ -42,6 +42,7 @@ export default function CartDrawer() {
 						studentName: item.studentName,
 						grade: item.grade,
 						quantity: item.quantity,
+						sponsor: item.sponsor,
 					})),
 				}),
 			});
@@ -158,6 +159,14 @@ export default function CartDrawer() {
 								>
 									{item.studentName} — {item.grade}
 								</p>
+								{item.sponsor && (
+									<p
+										style={{ fontFamily: "var(--font-body)", color: "var(--color-muted-text)" }}
+										className="text-xs"
+									>
+										+ Sponsor a Teacher
+									</p>
+								)}
 
 								<div className="flex items-center justify-between mt-2">
 									<div
@@ -192,7 +201,7 @@ export default function CartDrawer() {
 										style={{ fontFamily: "var(--font-body)", color: "var(--color-forest)" }}
 										className="text-sm font-medium"
 									>
-										${(item.unitPrice * item.quantity).toFixed(2)}
+										${(item.unitPrice * item.quantity + (item.sponsor ? item.unitPrice : 0)).toFixed(2)}
 									</span>
 								</div>
 							</div>

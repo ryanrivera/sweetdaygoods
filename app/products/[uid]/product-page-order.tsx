@@ -45,6 +45,7 @@ export default function ProductPageOrder({
 	const [sizeError, setSizeError] = useState(false);
 	const [studentInfoError, setStudentInfoError] = useState(false);
 	const [termsOpen, setTermsOpen] = useState(false);
+	const [sponsorChecked, setSponsorChecked] = useState(false);
 
 	useEffect(() => {
 		if (!termsOpen) return;
@@ -88,6 +89,7 @@ export default function ProductPageOrder({
 	};
 
 	const photo = images[activePhoto];
+	const orderTotal = price * quantity + (sponsorChecked ? price : 0);
 
 	function handleAddToCart() {
 		if (sizeGroups.length > 0 && !selectedSize) {
@@ -110,6 +112,7 @@ export default function ProductPageOrder({
 			grade: grade.trim(),
 			unitPrice: price,
 			quantity,
+			sponsor: sponsorChecked,
 			image: photo ? { url: photo.image.url, alt: photo.image.alt || data.name || "" } : null,
 		});
 		setOrderState("added");
@@ -437,6 +440,22 @@ export default function ProductPageOrder({
 							</div>
 						</div>
 
+						{/* Sponsor */}
+						{isFilled.keyText(data.sponsor) && (
+							<label
+								className="flex items-center gap-2 text-sm cursor-pointer"
+								style={{ fontFamily: "var(--font-body)", color: "var(--color-forest)" }}
+							>
+								<input
+									type="checkbox"
+									checked={sponsorChecked}
+									onChange={(e) => setSponsorChecked(e.target.checked)}
+									className="w-4 h-4"
+								/>
+								{data.sponsor}
+							</label>
+						)}
+
 						{/* Order total */}
 						<div
 							className="flex items-center justify-between px-4 py-3 rounded-lg"
@@ -446,7 +465,7 @@ export default function ProductPageOrder({
 								Order total
 							</span>
 							<span style={{ fontFamily: "var(--font-heading)", color: "var(--color-forest)" }} className="font-bold text-lg">
-								${(price * quantity).toFixed(2)}
+								${orderTotal.toFixed(2)}
 							</span>
 						</div>
 
@@ -460,7 +479,7 @@ export default function ProductPageOrder({
 								fontFamily: "var(--font-body)",
 							}}
 						>
-							{orderState === "added" ? "✓ ADDED TO CART" : `ADD TO CART — $${(price * quantity).toFixed(2)}`}
+							{orderState === "added" ? "✓ ADDED TO CART" : `ADD TO CART — $${orderTotal.toFixed(2)}`}
 						</button>
 
 						{/* Disclaimer */}

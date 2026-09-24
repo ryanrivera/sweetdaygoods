@@ -10,7 +10,10 @@ type CheckoutItemInput = {
 	studentName: unknown;
 	grade: unknown;
 	quantity: unknown;
+	sponsor: unknown;
 };
+
+const SPONSOR_PRODUCT_NAME = "Sponsor a Teacher";
 
 const MAX_QUANTITY_PER_LINE = 20;
 // Student name gets folded into the Stripe line item's product name
@@ -47,6 +50,7 @@ export async function POST(request: NextRequest) {
 		studentName: string;
 		grade: string;
 		quantity: number;
+		sponsor: boolean;
 	}[] = [];
 	for (const raw of rawItems as CheckoutItemInput[]) {
 		const uid = raw?.uid;
@@ -54,6 +58,7 @@ export async function POST(request: NextRequest) {
 		const studentName = raw?.studentName;
 		const grade = raw?.grade;
 		const quantity = raw?.quantity;
+		const sponsor = raw?.sponsor;
 
 		if (typeof uid !== "string" || !uid) {
 			return NextResponse.json({ error: "Invalid cart item." }, { status: 400 });
@@ -82,6 +87,9 @@ export async function POST(request: NextRequest) {
 		) {
 			return NextResponse.json({ error: "Invalid item quantity." }, { status: 400 });
 		}
+		if (typeof sponsor !== "boolean") {
+			return NextResponse.json({ error: "Invalid cart item." }, { status: 400 });
+		}
 
 		items.push({
 			uid,
@@ -89,6 +97,7 @@ export async function POST(request: NextRequest) {
 			studentName: studentName.trim(),
 			grade: grade.trim(),
 			quantity,
+			sponsor,
 		});
 	}
 
@@ -107,7 +116,7 @@ export async function POST(request: NextRequest) {
 
 	const pagesByUid = new Map(pages.map((page) => [page.uid, page]));
 
-	const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = items.map(
+	const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = items.flatMap(
 		(item) => {
 			const page = pagesByUid.get(item.uid);
 			if (!page) throw new Error(`Unknown product: ${item.uid}`);
@@ -121,12 +130,13 @@ export async function POST(request: NextRequest) {
 			);
 			const image = page.data.images.find((img) => isFilled.image(img.image))
 				?.image;
+			const unitAmount = Math.round((page.data.price ?? 0) * 100);
 
-			return {
+			const productLine: Stripe.Checkout.SessionCreateParams.LineItem = {
 				quantity: item.quantity,
 				price_data: {
 					currency: "usd",
-					unit_amount: Math.round((page.data.price ?? 0) * 100),
+					unit_amount: unitAmount,
 					product_data: {
 						name,
 						images: image && isFilled.image(image) ? [image.url] : undefined,
@@ -137,6 +147,28 @@ export async function POST(request: NextRequest) {
 					},
 				},
 			};
+
+			if (!item.sponsor) return [productLine];
+
+			// The sponsor add-on always costs the same as the product it's attached
+			// to, so its price comes from the same server-resolved page rather than
+			// anything client-supplied.
+			const sponsorLine: Stripe.Checkout.SessionCreateParams.LineItem = {
+				quantity: 1,
+				price_data: {
+					currency: "usd",
+					unit_amount: unitAmount,
+					product_data: {
+						name: SPONSOR_PRODUCT_NAME,
+						metadata: {
+							studentName: item.studentName,
+							grade: item.grade,
+						},
+					},
+				},
+			};
+
+			return [productLine, sponsorLine];
 		},
 	);
 
