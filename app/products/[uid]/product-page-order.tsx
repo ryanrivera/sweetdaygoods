@@ -96,6 +96,11 @@ export default function ProductPageOrder({
 
 	const photo = images[activePhoto];
 	const orderTotal = price * quantity + (sponsorChecked ? price : 0);
+	const sponsorFieldReady =
+		(sizeGroups.length === 0 || selectedSize !== null) &&
+		quantity >= 1 &&
+		studentName.trim() !== "" &&
+		grade.trim() !== "";
 
 	function handleAddToCart() {
 		if (sizeGroups.length > 0 && !selectedSize) {
@@ -456,25 +461,12 @@ export default function ProductPageOrder({
 						</div>
 
 						{/* Sponsor */}
-						{isFilled.keyText(data.sponsor) && (
-							<label
-								className="flex items-center gap-3 text-sm font-medium cursor-pointer px-4 py-3 rounded-lg transition-colors duration-150"
-								style={{
-									fontFamily: "var(--font-body)",
-									color: "var(--color-forest)",
-									backgroundColor: sponsorChecked ? "rgba(245,196,66,0.35)" : "rgba(245,196,66,0.18)",
-									border: "1.5px solid rgba(245,196,66,0.6)",
-								}}
-							>
-								<input
-									type="checkbox"
-									checked={sponsorChecked}
-									onChange={(e) => setSponsorChecked(e.target.checked)}
-									className="w-[18px] h-[18px] flex-shrink-0"
-									style={{ accentColor: "var(--color-forest)" }}
-								/>
-								<span>🍎 {data.sponsor}</span>
-							</label>
+						{isFilled.keyText(data.sponsor) && sponsorFieldReady && (
+							<SponsorField
+								label={data.sponsor}
+								checked={sponsorChecked}
+								onChange={setSponsorChecked}
+							/>
 						)}
 
 						{/* Order total */}
@@ -599,5 +591,52 @@ function SizeButton({
 		>
 			{size}
 		</button>
+	);
+}
+
+function SponsorField({
+	label,
+	checked,
+	onChange,
+}: {
+	label: string;
+	checked: boolean;
+	onChange: (checked: boolean) => void;
+}) {
+	// Starts hidden and flips to visible a frame after mount, so the
+	// opacity/transform transition below actually animates in rather than
+	// snapping straight to its resting state.
+	const [visible, setVisible] = useState(false);
+
+	useEffect(() => {
+		const frame = requestAnimationFrame(() => setVisible(true));
+		return () => cancelAnimationFrame(frame);
+	}, []);
+
+	return (
+		<div
+			className={`transition-all duration-500 ease-out ${
+				visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
+			}`}
+		>
+			<label
+				className="flex items-center gap-3 text-sm font-medium cursor-pointer px-4 py-3 rounded-lg transition-colors duration-150"
+				style={{
+					fontFamily: "var(--font-body)",
+					color: "var(--color-forest)",
+					backgroundColor: checked ? "rgba(245,196,66,0.35)" : "rgba(245,196,66,0.18)",
+					border: "1.5px solid rgba(245,196,66,0.6)",
+				}}
+			>
+				<input
+					type="checkbox"
+					checked={checked}
+					onChange={(e) => onChange(e.target.checked)}
+					className="w-[18px] h-[18px] flex-shrink-0"
+					style={{ accentColor: "var(--color-forest)" }}
+				/>
+				<span>🍎 {label}</span>
+			</label>
+		</div>
 	);
 }
