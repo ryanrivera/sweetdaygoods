@@ -241,7 +241,16 @@ export default function ProductPageOrder({
 								}}
 								className="text-sm"
 							>
-								<PrismicRichText field={data.description} />
+								<PrismicRichText
+									field={data.description}
+									components={{
+										paragraph: ({ children, key }) => (
+											<p key={key} className="mb-3 last:mb-0">
+												{children}
+											</p>
+										),
+									}}
+								/>
 							</div>
 						</div>
 
