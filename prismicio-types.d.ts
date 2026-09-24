@@ -210,7 +210,18 @@ interface ProductPageDocumentData {
 	 * - **Documentation**: https://prismic.io/docs/fields/number
 	 */
 	price: prismic.NumberField;
-	
+
+	/**
+	 * Sponsor field in *Product Page*
+	 *
+	 * - **Field Type**: Text
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: product_page.sponsor
+	 * - **Tab**: Main
+	 * - **Documentation**: https://prismic.io/docs/fields/text
+	 */
+	sponsor: prismic.KeyTextField;
+
 	/**
 	 * Images field in *Product Page*
 	 *

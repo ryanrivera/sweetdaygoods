@@ -39,6 +39,13 @@
         },
         "type": "Number"
       },
+      "sponsor": {
+        "config": {
+          "label": "Sponsor",
+          "placeholder": ""
+        },
+        "type": "Text"
+      },
       "images": {
         "config": {
           "fields": {
