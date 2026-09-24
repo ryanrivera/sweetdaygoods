@@ -65,6 +65,24 @@
         },
         "type": "StructuredText"
       },
+      "footer": {
+        "config": {
+          "allowTargetBlank": true,
+          "label": "Footer",
+          "multi": "paragraph,strong,em,hyperlink,list-item,o-list-item",
+          "placeholder": ""
+        },
+        "type": "StructuredText"
+      },
+      "terms": {
+        "config": {
+          "allowTargetBlank": true,
+          "label": "Terms",
+          "multi": "paragraph,strong,em,hyperlink,list-item,o-list-item",
+          "placeholder": ""
+        },
+        "type": "StructuredText"
+      },
       "slices": {
         "config": {
           "choices": {

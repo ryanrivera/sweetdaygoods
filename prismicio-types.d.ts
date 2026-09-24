@@ -232,7 +232,29 @@ interface ProductPageDocumentData {
 	 * - **Documentation**: https://prismic.io/docs/fields/rich-text
 	 */
 	disclaimer: prismic.RichTextField;
-	
+
+	/**
+	 * Footer field in *Product Page*
+	 *
+	 * - **Field Type**: Rich Text
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: product_page.footer
+	 * - **Tab**: Main
+	 * - **Documentation**: https://prismic.io/docs/fields/rich-text
+	 */
+	footer: prismic.RichTextField;
+
+	/**
+	 * Terms field in *Product Page*
+	 *
+	 * - **Field Type**: Rich Text
+	 * - **Placeholder**: *None*
+	 * - **API ID Path**: product_page.terms
+	 * - **Tab**: Main
+	 * - **Documentation**: https://prismic.io/docs/fields/rich-text
+	 */
+	terms: prismic.RichTextField;
+
 	/**
 	 * Slice Zone field in *Product Page*
 	 *
