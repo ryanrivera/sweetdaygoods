@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { isFilled } from "@prismicio/client";
 import { PrismicRichText } from "@prismicio/react";
+import type { RichTextComponents } from "@prismicio/react";
 import type {
 	ProductPageDocument,
 	ProductPageDocumentDataImagesItem,
@@ -43,6 +44,48 @@ export default function ProductPageOrder({
 	const [orderState, setOrderState] = useState<OrderState>("idle");
 	const [sizeError, setSizeError] = useState(false);
 	const [studentInfoError, setStudentInfoError] = useState(false);
+	const [termsOpen, setTermsOpen] = useState(false);
+
+	useEffect(() => {
+		if (!termsOpen) return;
+		function handleKeyDown(e: KeyboardEvent) {
+			if (e.key === "Escape") setTermsOpen(false);
+		}
+		document.addEventListener("keydown", handleKeyDown);
+		return () => document.removeEventListener("keydown", handleKeyDown);
+	}, [termsOpen]);
+
+	const footerComponents: RichTextComponents = {
+		hyperlink: ({ node, children, key }) => {
+			if (node.data.link_type === "Web" && node.data.url === "#terms-and-conditions") {
+				return (
+					<button
+						key={key}
+						type="button"
+						onClick={() => setTermsOpen(true)}
+						className="underline"
+						style={{
+							font: "inherit",
+							color: "inherit",
+							background: "none",
+							border: "none",
+							padding: 0,
+							cursor: "pointer",
+						}}
+					>
+						{children}
+					</button>
+				);
+			}
+			const url = node.data.link_type === "Web" ? node.data.url : undefined;
+			const target = node.data.link_type === "Web" ? node.data.target : undefined;
+			return (
+				<a key={key} href={url} target={target} rel={target === "_blank" ? "noopener noreferrer" : undefined}>
+					{children}
+				</a>
+			);
+		},
+	};
 
 	const photo = images[activePhoto];
 
@@ -432,6 +475,64 @@ export default function ProductPageOrder({
 					</div>
 				</div>
 			</main>
+
+			{/* Footer */}
+			{isFilled.richText(data.footer) && (
+				<footer
+					className="max-w-5xl mx-auto px-6 py-8 text-center text-xs"
+					style={{
+						borderTop: "1px solid var(--color-border)",
+						color: "var(--color-muted-text)",
+						fontFamily: "var(--font-body)",
+					}}
+				>
+					<PrismicRichText field={data.footer} components={footerComponents} />
+				</footer>
+			)}
+
+			{/* Terms & Conditions modal */}
+			{termsOpen && (
+				<div
+					className="fixed inset-0 z-[70] flex items-center justify-center p-4"
+					role="dialog"
+					aria-modal="true"
+					aria-label="Terms and Conditions"
+				>
+					<div
+						onClick={() => setTermsOpen(false)}
+						className="absolute inset-0"
+						style={{ backgroundColor: "rgba(15,61,39,0.45)" }}
+						aria-hidden="true"
+					/>
+					<div
+						className="relative w-full max-w-lg max-h-[80vh] overflow-y-auto rounded-xl p-6"
+						style={{ backgroundColor: "var(--color-cream)" }}
+					>
+						<div className="flex items-center justify-between mb-4">
+							<h2
+								style={{ fontFamily: "var(--font-heading)", color: "var(--color-forest)" }}
+								className="text-lg font-bold"
+							>
+								Terms and Conditions
+							</h2>
+							<button
+								onClick={() => setTermsOpen(false)}
+								aria-label="Close"
+								style={{ color: "var(--color-forest)", fontFamily: "var(--font-body)" }}
+								className="text-2xl leading-none"
+							>
+								×
+							</button>
+						</div>
+						<div
+							style={{ color: "var(--color-muted-text)", fontFamily: "var(--font-body)", lineHeight: 1.7 }}
+							className="text-sm"
+						>
+							<PrismicRichText field={data.terms} />
+						</div>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }
