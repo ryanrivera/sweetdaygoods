@@ -494,7 +494,7 @@ export default function ProductPageOrder({
 								fontFamily: "var(--font-body)",
 							}}
 						>
-							{orderState === "added" ? "✓ ADDED TO CART" : `ADD TO CART — $${orderTotal.toFixed(2)}`}
+							{orderState === "added" ? "✓ ADDED TO CART" : "ADD TO CART"}
 						</button>
 
 						{/* Disclaimer */}
