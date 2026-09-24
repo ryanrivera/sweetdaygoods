@@ -9,7 +9,7 @@ export default function CartButton() {
 		<button
 			onClick={cart.open}
 			aria-label={`Open cart, ${cart.itemCount} item${cart.itemCount === 1 ? "" : "s"}`}
-			className="relative flex items-center justify-center w-9 h-9 rounded-full transition-colors hover:bg-black/5"
+			className="relative flex items-center justify-center w-9 h-9 rounded-full cursor-pointer transition-all duration-150 hover:bg-black/5 hover:scale-105 active:scale-95"
 			style={{ color: "var(--color-forest)" }}
 		>
 			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">

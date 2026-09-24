@@ -201,7 +201,7 @@ export default function ProductPageOrder({
 									<button
 										key={i}
 										onClick={() => setActivePhoto(i)}
-										className="relative overflow-hidden rounded-lg transition-all duration-200"
+										className="relative overflow-hidden rounded-lg cursor-pointer transition-all duration-200 hover:scale-[1.03]"
 										style={{
 											aspectRatio: "1/1",
 											backgroundColor: "#d4e8da",
@@ -412,7 +412,7 @@ export default function ProductPageOrder({
 							>
 								<button
 									onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-									className="w-10 h-10 flex items-center justify-center text-lg transition-colors hover:bg-gray-100"
+									className="w-10 h-10 flex items-center justify-center text-lg cursor-pointer transition-colors duration-150 hover:bg-gray-100 active:scale-95"
 									style={{
 										fontFamily: "var(--font-body)",
 										color: "var(--color-forest)",
@@ -436,7 +436,7 @@ export default function ProductPageOrder({
 								</span>
 								<button
 									onClick={() => setQuantity((q) => q + 1)}
-									className="w-10 h-10 flex items-center justify-center text-lg transition-colors hover:bg-gray-100"
+									className="w-10 h-10 flex items-center justify-center text-lg cursor-pointer transition-colors duration-150 hover:bg-gray-100 active:scale-95"
 									style={{
 										fontFamily: "var(--font-body)",
 										color: "var(--color-forest)",
@@ -487,7 +487,7 @@ export default function ProductPageOrder({
 						{/* CTA */}
 						<button
 							onClick={handleAddToCart}
-							className="w-full py-3.5 rounded-lg text-sm font-medium tracking-widest transition-all duration-150 active:scale-[0.98]"
+							className="w-full py-3.5 rounded-lg text-sm font-medium tracking-widest cursor-pointer transition-all duration-150 hover:brightness-110 active:scale-[0.98]"
 							style={{
 								backgroundColor: orderState === "added" ? "var(--color-yellow)" : "var(--color-forest)",
 								color: orderState === "added" ? "var(--color-forest)" : "white",
@@ -583,7 +583,7 @@ function SizeButton({
 	return (
 		<button
 			onClick={onClick}
-			className="min-w-[44px] px-3 py-1.5 rounded text-sm font-medium transition-all duration-150"
+			className="min-w-[44px] px-3 py-1.5 rounded text-sm font-medium cursor-pointer transition-all duration-150 hover:brightness-95 active:scale-95"
 			style={{
 				fontFamily: "var(--font-body)",
 				backgroundColor: selected ? "var(--color-forest)" : "white",
