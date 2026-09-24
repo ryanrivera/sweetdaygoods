@@ -443,16 +443,22 @@ export default function ProductPageOrder({
 						{/* Sponsor */}
 						{isFilled.keyText(data.sponsor) && (
 							<label
-								className="flex items-center gap-2 text-sm cursor-pointer"
-								style={{ fontFamily: "var(--font-body)", color: "var(--color-forest)" }}
+								className="flex items-center gap-3 text-sm font-medium cursor-pointer px-4 py-3 rounded-lg transition-colors duration-150"
+								style={{
+									fontFamily: "var(--font-body)",
+									color: "var(--color-forest)",
+									backgroundColor: sponsorChecked ? "rgba(245,196,66,0.35)" : "rgba(245,196,66,0.18)",
+									border: "1.5px solid rgba(245,196,66,0.6)",
+								}}
 							>
 								<input
 									type="checkbox"
 									checked={sponsorChecked}
 									onChange={(e) => setSponsorChecked(e.target.checked)}
-									className="w-4 h-4"
+									className="w-[18px] h-[18px] flex-shrink-0"
+									style={{ accentColor: "var(--color-forest)" }}
 								/>
-								{data.sponsor}
+								<span>🍎 {data.sponsor}</span>
 							</label>
 						)}
 
