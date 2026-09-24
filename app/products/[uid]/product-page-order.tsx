@@ -56,7 +56,7 @@ export default function ProductPageOrder({
 		return () => document.removeEventListener("keydown", handleKeyDown);
 	}, [termsOpen]);
 
-	const footerComponents: RichTextComponents = {
+	const linkComponents: RichTextComponents = {
 		hyperlink: ({ node, children, key }) => {
 			if (node.data.link_type === "Web" && node.data.url === "#terms-and-conditions") {
 				return (
@@ -81,7 +81,13 @@ export default function ProductPageOrder({
 			const url = node.data.link_type === "Web" ? node.data.url : undefined;
 			const target = node.data.link_type === "Web" ? node.data.target : undefined;
 			return (
-				<a key={key} href={url} target={target} rel={target === "_blank" ? "noopener noreferrer" : undefined}>
+				<a
+					key={key}
+					href={url}
+					target={target}
+					rel={target === "_blank" ? "noopener noreferrer" : undefined}
+					className="underline"
+				>
 					{children}
 				</a>
 			);
@@ -503,7 +509,7 @@ export default function ProductPageOrder({
 								style={{ color: "var(--color-muted-text)", fontFamily: "var(--font-body)" }}
 								className="text-xs text-center"
 							>
-								<PrismicRichText field={data.disclaimer} />
+								<PrismicRichText field={data.disclaimer} components={linkComponents} />
 							</div>
 						)}
 					</div>
@@ -520,7 +526,7 @@ export default function ProductPageOrder({
 						fontFamily: "var(--font-body)",
 					}}
 				>
-					<PrismicRichText field={data.footer} components={footerComponents} />
+					<PrismicRichText field={data.footer} components={linkComponents} />
 				</footer>
 			)}
 
