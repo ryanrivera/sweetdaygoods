@@ -63,6 +63,15 @@
         },
         "type": "Group"
       },
+      "note": {
+        "config": {
+          "allowTargetBlank": true,
+          "label": "Note",
+          "multi": "paragraph,strong,em,hyperlink",
+          "placeholder": "Important info about this order"
+        },
+        "type": "StructuredText"
+      },
       "disclaimer": {
         "config": {
           "allowTargetBlank": true,

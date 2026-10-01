@@ -234,6 +234,17 @@ interface ProductPageDocumentData {
 	images: prismic.GroupField<Simplify<ProductPageDocumentDataImagesItem>>;
 	
 	/**
+	 * Note field in *Product Page*
+	 *
+	 * - **Field Type**: Rich Text
+	 * - **Placeholder**: *Important info about this order*
+	 * - **API ID Path**: product_page.note
+	 * - **Tab**: Main
+	 * - **Documentation**: https://prismic.io/docs/fields/rich-text
+	 */
+	note: prismic.RichTextField;
+
+	/**
 	 * Disclaimer field in *Product Page*
 	 *
 	 * - **Field Type**: Rich Text

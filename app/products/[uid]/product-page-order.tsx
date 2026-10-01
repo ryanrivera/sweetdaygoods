@@ -482,6 +482,34 @@ export default function ProductPageOrder({
 							</span>
 						</div>
 
+						{/* Note */}
+						{isFilled.richText(data.note) && (
+							<div
+								role="note"
+								className="px-4 py-3 rounded-lg text-sm font-medium"
+								style={{
+									backgroundColor: "rgba(245,196,66,0.25)",
+									border: "1.5px solid var(--color-yellow)",
+									borderLeftWidth: "1.5px",
+									color: "var(--color-forest)",
+									fontFamily: "var(--font-body)",
+									lineHeight: 1.6,
+								}}
+							>
+								<PrismicRichText
+									field={data.note}
+									components={{
+										...linkComponents,
+										paragraph: ({ children, key }) => (
+											<p key={key} className="mb-2 last:mb-0">
+												{children}
+											</p>
+										),
+									}}
+								/>
+							</div>
+						)}
+
 						{/* CTA */}
 						<button
 							onClick={handleAddToCart}
