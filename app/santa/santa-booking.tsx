@@ -1,19 +1,67 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
 	CONTACT_EMAIL,
 	EVENT_DATE_LABEL,
 	EVENT_LABEL,
 	PRICE_CENTS,
+	SLOT_IDS,
 	formatSlot,
 } from "./config";
 
 type Confirmation = { slot: string; name: string };
 
+const PRICE_LABEL = `$${(PRICE_CENTS / 100).toFixed(2)}`;
+
+function hourLabel(hour: number) {
+	return `${hour % 12 === 0 ? 12 : hour % 12} ${hour >= 12 ? "PM" : "AM"}`;
+}
+
+function CrossMark({ size = 36 }: { size?: number }) {
+	return (
+		<div
+			style={{ width: size, height: size, backgroundColor: "var(--color-yellow)" }}
+			className="flex flex-shrink-0 items-center justify-center rounded-md"
+			aria-hidden="true"
+		>
+			<svg width={size / 2} height={size * 0.6} viewBox="0 0 18 22" fill="none">
+				<rect x="6" y="0" width="6" height="22" rx="2" fill="#0f3d27" />
+				<rect x="0" y="6" width="18" height="6" rx="2" fill="#0f3d27" />
+			</svg>
+		</div>
+	);
+}
+
+function Header() {
+	return (
+		<header
+			style={{ backgroundColor: "var(--color-forest)", borderBottom: "3px solid var(--color-yellow)" }}
+			className="px-4 py-3"
+		>
+			<div className="mx-auto flex max-w-xl items-center gap-3">
+				<CrossMark />
+				<div>
+					<div
+						style={{ fontFamily: "var(--font-heading)", lineHeight: 1.1 }}
+						className="text-[15px] font-bold text-white"
+					>
+						St. Columba Catholic School
+					</div>
+					<div
+						style={{ color: "var(--color-yellow)", fontSize: 11, letterSpacing: "0.08em" }}
+						className="uppercase"
+					>
+						Winter Market
+					</div>
+				</div>
+			</div>
+		</header>
+	);
+}
+
 export default function SantaBooking() {
-	const [slots, setSlots] = useState<string[]>([]);
-	const [taken, setTaken] = useState<Set<string>>(new Set());
+	const [taken, setTaken] = useState<Set<string> | null>(null);
 	const [loadError, setLoadError] = useState(false);
 	const [selected, setSelected] = useState<string | null>(null);
 	const [firstName, setFirstName] = useState("");
@@ -29,7 +77,6 @@ export default function SantaBooking() {
 			const res = await fetch("/api/santa/slots", { cache: "no-store" });
 			if (!res.ok) throw new Error();
 			const data = await res.json();
-			setSlots(data.slots);
 			setTaken(new Set(data.taken));
 			setLoadError(false);
 			// Drop a selection that someone else grabbed in the meantime.
@@ -52,7 +99,7 @@ export default function SantaBooking() {
 		if (!sessionId) return;
 		(async () => {
 			setReturning(true);
-			// The webhook/session can take a moment; retry briefly.
+			// The Checkout Session can take a moment to read as paid; retry briefly.
 			for (let i = 0; i < 5; i++) {
 				const res = await fetch(`/api/santa/booking?session_id=${encodeURIComponent(sessionId)}`);
 				if (res.ok) {
@@ -65,10 +112,22 @@ export default function SantaBooking() {
 		})();
 	}, []);
 
+	const groups = useMemo(() => {
+		const byHour = new Map<number, string[]>();
+		for (const id of SLOT_IDS) {
+			const hour = Number(id.split(":")[0]);
+			byHour.set(hour, [...(byHour.get(hour) ?? []), id]);
+		}
+		return [...byHour.entries()];
+	}, []);
+
+	const left = taken ? SLOT_IDS.length - taken.size : null;
+
 	async function handleSubmit(e: React.FormEvent) {
 		e.preventDefault();
 		if (!selected) {
-			setError("Please choose a time.");
+			setError("Please choose a time first.");
+			window.scrollTo({ top: 0, behavior: "smooth" });
 			return;
 		}
 		setSubmitting(true);
@@ -96,137 +155,241 @@ export default function SantaBooking() {
 		}
 	}
 
-	if (confirmation) {
+	if (confirmation || returning) {
 		return (
-			<main className="mx-auto max-w-xl px-4 py-12 text-center">
-				<h1 className="text-3xl font-bold text-green-900">You&apos;re booked! 🎅</h1>
-				<p className="mt-4 text-lg">
-					{confirmation.name}, your portrait with Santa is reserved for{" "}
-					<strong>{formatSlot(confirmation.slot)}</strong> on {EVENT_DATE_LABEL} at the{" "}
-					{EVENT_LABEL}.
-				</p>
-				<p className="mt-4 text-sm text-neutral-600">
-					Need to change or cancel? Email{" "}
+			<div className="santa-page">
+				<Header />
+				<main className="mx-auto max-w-xl px-4 py-8">
+					{confirmation ? (
+						<div className="santa-pop">
+							<div className="mb-6 text-center">
+								<div className="text-5xl" aria-hidden="true">
+									🎅
+								</div>
+								<h1 className="mt-3 text-3xl font-bold">You&apos;re booked!</h1>
+								<p style={{ color: "var(--color-muted-text)" }} className="mt-1">
+									See you at the Winter Market, {confirmation.name.split(" ")[0]}.
+								</p>
+							</div>
+							<div className="santa-ticket">
+								<div className="px-6 pt-6 pb-8 text-center">
+									<div
+										style={{ color: "var(--color-muted-text)", letterSpacing: "0.12em" }}
+										className="text-xs uppercase"
+									>
+										Your Santa time
+									</div>
+									<div
+										style={{ fontFamily: "var(--font-heading)" }}
+										className="mt-1 text-5xl font-bold"
+									>
+										{formatSlot(confirmation.slot)}
+									</div>
+									<div className="mt-2 text-[15px]">{EVENT_DATE_LABEL}</div>
+								</div>
+								<div
+									style={{ borderTop: "2px dashed var(--color-border)" }}
+									className="space-y-1 px-6 py-5 text-center text-sm"
+								>
+									<div className="font-medium">{confirmation.name}</div>
+									<div style={{ color: "var(--color-muted-text)" }}>{EVENT_LABEL}</div>
+								</div>
+							</div>
+							<p style={{ color: "var(--color-muted-text)" }} className="mt-6 text-center text-sm">
+								Tip: take a screenshot of this page. Need to change or cancel? Email{" "}
+								<a className="underline" href={`mailto:${CONTACT_EMAIL}`}>
+									{CONTACT_EMAIL}
+								</a>
+								.
+							</p>
+						</div>
+					) : (
+						<p className="py-20 text-center" role="status">
+							Confirming your booking…
+						</p>
+					)}
+				</main>
+			</div>
+		);
+	}
+
+	return (
+		<div className="santa-page">
+			<Header />
+
+			<section className="santa-hero px-4 pt-8 pb-12 text-white">
+				<div className="santa-snow" aria-hidden="true" />
+				<div className="relative mx-auto max-w-xl">
+					<h1 className="text-[34px] leading-[1.1] font-bold">
+						Portraits
+						<br />
+						with Santa <span aria-hidden="true">🎅</span>
+					</h1>
+					<p className="mt-3 text-[15px] leading-relaxed text-white/85">
+						Reserve a private 10-minute visit and take home a keepsake portrait.
+						Every session supports St. Columba Catholic School.
+					</p>
+					<div className="mt-5 flex flex-wrap gap-2 text-[13px] font-medium">
+						{[EVENT_DATE_LABEL, "9 AM – 1 PM", `${PRICE_LABEL} per session`].map((chip) => (
+							<span
+								key={chip}
+								style={{ backgroundColor: "rgba(255,255,255,0.14)", border: "1px solid rgba(255,255,255,0.22)" }}
+								className="rounded-full px-3 py-1.5"
+							>
+								{chip}
+							</span>
+						))}
+					</div>
+				</div>
+			</section>
+
+			<form
+				id="santa-form"
+				onSubmit={handleSubmit}
+				className="relative mx-auto -mt-6 max-w-xl space-y-4 px-4 pb-44"
+			>
+				<section className="santa-card p-5">
+					<div className="flex items-center gap-3">
+						<span className="santa-step">1</span>
+						<h2 className="text-xl font-bold">Pick a time</h2>
+					</div>
+					<p style={{ color: "var(--color-muted-text)" }} className="mt-2 text-sm" aria-live="polite">
+						{loadError
+							? "Couldn't load times — please refresh."
+							: left === null
+								? "Loading times…"
+								: left === 0
+									? "All times are booked. Thank you for the support!"
+									: `${left} of ${SLOT_IDS.length} times left`}
+					</p>
+
+					<div role="radiogroup" aria-label="Available times" className="mt-4 space-y-5">
+						{groups.map(([hour, ids]) => (
+							<div key={hour}>
+								<h3
+									style={{ color: "var(--color-muted-text)", letterSpacing: "0.1em" }}
+									className="mb-2 text-xs font-bold uppercase"
+								>
+									{hourLabel(hour)} hour
+								</h3>
+								<div className="grid grid-cols-3 gap-2">
+									{ids.map((slot) =>
+										taken === null ? (
+											<div key={slot} className="santa-skeleton" />
+										) : (
+											<button
+												key={slot}
+												type="button"
+												role="radio"
+												aria-checked={selected === slot}
+												aria-label={`${formatSlot(slot)}${taken.has(slot) ? ", booked" : ""}`}
+												disabled={taken.has(slot)}
+												onClick={() => {
+													setSelected(slot);
+													setError(null);
+												}}
+												className="santa-slot"
+											>
+												{formatSlot(slot)}
+											</button>
+										),
+									)}
+								</div>
+							</div>
+						))}
+					</div>
+				</section>
+
+				<section className="santa-card p-5">
+					<div className="flex items-center gap-3">
+						<span className="santa-step">2</span>
+						<h2 className="text-xl font-bold">Your details</h2>
+					</div>
+					<div className="mt-4 grid grid-cols-2 gap-3">
+						<div>
+							<label className="santa-label" htmlFor="santa-first-name">
+								First name
+							</label>
+							<input
+								id="santa-first-name"
+								className="santa-input"
+								required
+								maxLength={30}
+								autoComplete="given-name"
+								enterKeyHint="next"
+								value={firstName}
+								onChange={(e) => setFirstName(e.target.value)}
+							/>
+						</div>
+						<div>
+							<label className="santa-label" htmlFor="santa-last-name">
+								Last name
+							</label>
+							<input
+								id="santa-last-name"
+								className="santa-input"
+								required
+								maxLength={30}
+								autoComplete="family-name"
+								enterKeyHint="next"
+								value={lastName}
+								onChange={(e) => setLastName(e.target.value)}
+							/>
+						</div>
+					</div>
+					<div className="mt-3">
+						<label className="santa-label" htmlFor="santa-phone">
+							Phone number
+						</label>
+						<input
+							id="santa-phone"
+							className="santa-input"
+							required
+							type="tel"
+							inputMode="tel"
+							maxLength={30}
+							autoComplete="tel"
+							enterKeyHint="done"
+							placeholder="(555) 123-4567"
+							value={phone}
+							onChange={(e) => setPhone(e.target.value)}
+						/>
+						<p style={{ color: "var(--color-muted-text)" }} className="mt-2 text-xs">
+							We&apos;ll only use this if we need to reach you about your time.
+						</p>
+					</div>
+				</section>
+
+				<p style={{ color: "var(--color-muted-text)" }} className="px-2 text-center text-xs leading-relaxed">
+					Your time is held for 30 minutes while you check out. To change or cancel after
+					booking, email{" "}
 					<a className="underline" href={`mailto:${CONTACT_EMAIL}`}>
 						{CONTACT_EMAIL}
 					</a>
 					.
 				</p>
-			</main>
-		);
-	}
-
-	return (
-		<main className="mx-auto max-w-2xl px-4 py-10">
-			<h1 className="text-3xl font-bold text-green-900">Portraits with Santa</h1>
-			<p className="mt-2 text-neutral-700">
-				{EVENT_LABEL} · {EVENT_DATE_LABEL} · 9:00 AM – 1:00 PM
-			</p>
-			<p className="mt-1 text-neutral-700">
-				10-minute sessions · ${(PRICE_CENTS / 100).toFixed(2)} · Proceeds benefit St.
-				Columba Catholic School.
-			</p>
-			{returning && <p className="mt-4">Confirming your booking…</p>}
-
-			<form onSubmit={handleSubmit} className="mt-8">
-				<h2 className="text-lg font-semibold">1. Choose a time</h2>
-				{loadError && (
-					<p className="mt-2 text-red-700">Couldn&apos;t load times. Please refresh.</p>
-				)}
-				<div
-					role="radiogroup"
-					aria-label="Available times"
-					className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-4"
-				>
-					{slots.map((slot) => {
-						const isTaken = taken.has(slot);
-						const isSelected = selected === slot;
-						return (
-							<button
-								key={slot}
-								type="button"
-								role="radio"
-								aria-checked={isSelected}
-								disabled={isTaken}
-								onClick={() => setSelected(slot)}
-								className={`cursor-pointer rounded-md border px-2 py-2 text-sm transition ${
-									isSelected
-										? "border-green-900 bg-green-900 text-white"
-										: "border-neutral-300 bg-white text-neutral-900 hover:border-green-900"
-								} disabled:cursor-not-allowed disabled:bg-neutral-100 disabled:text-neutral-400 disabled:line-through disabled:hover:border-neutral-300`}
-							>
-								{formatSlot(slot)}
-							</button>
-						);
-					})}
-				</div>
-
-				<h2 className="mt-8 text-lg font-semibold">2. Your details</h2>
-				<div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
-					<div>
-						<label className="block text-sm font-medium" htmlFor="santa-first-name">
-							First name
-						</label>
-						<input
-							id="santa-first-name"
-							required
-							maxLength={30}
-							autoComplete="given-name"
-							value={firstName}
-							onChange={(e) => setFirstName(e.target.value)}
-							className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2"
-						/>
-					</div>
-					<div>
-						<label className="block text-sm font-medium" htmlFor="santa-last-name">
-							Last name
-						</label>
-						<input
-							id="santa-last-name"
-							required
-							maxLength={30}
-							autoComplete="family-name"
-							value={lastName}
-							onChange={(e) => setLastName(e.target.value)}
-							className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2"
-						/>
-					</div>
-				</div>
-				<label className="mt-4 block text-sm font-medium" htmlFor="santa-phone">
-					Phone number
-				</label>
-				<input
-					id="santa-phone"
-					required
-					type="tel"
-					maxLength={30}
-					autoComplete="tel"
-					value={phone}
-					onChange={(e) => setPhone(e.target.value)}
-					className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2"
-				/>
-
-				{error && (
-					<p role="alert" className="mt-4 text-red-700">
-						{error}
-					</p>
-				)}
-
-				<button
-					type="submit"
-					disabled={submitting}
-					className="mt-6 w-full cursor-pointer rounded-md bg-green-900 px-4 py-3 font-semibold text-white transition hover:bg-green-800 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
-				>
-					{submitting
-						? "Holding your time…"
-						: selected
-							? `Continue to payment — ${formatSlot(selected)}`
-							: "Continue to payment"}
-				</button>
-				<p className="mt-3 text-center text-xs text-neutral-600">
-					Your time is held for 30 minutes while you check out.
-				</p>
 			</form>
-		</main>
+
+			<div className="santa-bar">
+				<div className="mx-auto max-w-xl">
+					{error && (
+						<p
+							role="alert"
+							style={{ color: "var(--color-berry)" }}
+							className="mb-2 text-center text-sm font-medium"
+						>
+							{error}
+						</p>
+					)}
+					<button type="submit" form="santa-form" disabled={submitting} className="santa-cta">
+						{submitting
+							? "Holding your time…"
+							: selected
+								? `Continue to payment · ${formatSlot(selected)}`
+								: "Choose a time to continue"}
+					</button>
+				</div>
+			</div>
+		</div>
 	);
 }
