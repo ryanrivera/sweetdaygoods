@@ -18,7 +18,7 @@ const roboto = Roboto({
 export const metadata: Metadata = {
 	title: "Portraits with Santa — St. Columba Winter Market",
 	description:
-		"Reserve a 10-minute time slot for a portrait with Santa at the St. Columba Winter Market. Proceeds benefit St. Columba Catholic School.",
+		"Reserve a 10-minute time slot for a portrait with Santa at the St. Columba Winter Market and take home an instant 4x6 print. Proceeds benefit St. Columba Catholic School.",
 };
 
 export const viewport: Viewport = {

@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
 						unit_amount: PRICE_CENTS,
 						product_data: {
 							name: `Portrait with Santa — ${formatSlot(slot)}`,
-							description: `${EVENT_LABEL}. Reserved for ${name}.`,
+							description: `${EVENT_LABEL}. Includes an instant 4x6 print. Reserved for ${name}.`,
 						},
 					},
 				},
