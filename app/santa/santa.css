@@ -1,0 +1,236 @@
+.santa-page {
+	--font-heading: var(--font-arvo), serif;
+	--font-body: var(--font-roboto), sans-serif;
+	--color-forest: #0f3d27;
+	--color-forest-deep: #0a2b1b;
+	--color-yellow: #f5c842;
+	--color-cream: #f7faf8;
+	--color-mint: #d4e8da;
+	--color-muted-text: #5a6b60;
+	--color-border: #c8d8cc;
+	--color-berry: #b3261e;
+	font-family: var(--font-body);
+	background: var(--color-cream);
+	color: var(--color-forest);
+	min-height: 100vh;
+	min-height: 100dvh;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.santa-page h1,
+.santa-page h2,
+.santa-page h3 {
+	font-family: var(--font-heading);
+}
+
+/* Soft falling-snow texture for the hero */
+.santa-hero {
+	position: relative;
+	overflow: hidden;
+	background:
+		radial-gradient(circle at 85% 0%, rgba(245, 200, 66, 0.18), transparent 45%),
+		linear-gradient(180deg, var(--color-forest) 0%, var(--color-forest-deep) 100%);
+}
+.santa-snow {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background-image:
+		radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.7), transparent),
+		radial-gradient(2px 2px at 90px 80px, rgba(255, 255, 255, 0.55), transparent),
+		radial-gradient(3px 3px at 150px 20px, rgba(255, 255, 255, 0.5), transparent),
+		radial-gradient(2px 2px at 200px 120px, rgba(255, 255, 255, 0.65), transparent),
+		radial-gradient(2px 2px at 60px 150px, rgba(255, 255, 255, 0.45), transparent);
+	background-size: 240px 180px;
+	animation: santa-snow 18s linear infinite;
+}
+@keyframes santa-snow {
+	to {
+		background-position: 40px 180px;
+	}
+}
+
+.santa-card {
+	background: #fff;
+	border: 1px solid var(--color-border);
+	border-radius: 18px;
+	box-shadow: 0 1px 2px rgba(15, 61, 39, 0.05), 0 8px 24px rgba(15, 61, 39, 0.06);
+}
+
+.santa-step {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	border-radius: 999px;
+	background: var(--color-forest);
+	color: var(--color-yellow);
+	font-family: var(--font-heading);
+	font-weight: 700;
+	font-size: 14px;
+	flex-shrink: 0;
+}
+
+.santa-slot {
+	min-height: 52px;
+	border-radius: 12px;
+	border: 1.5px solid var(--color-border);
+	background: #fff;
+	color: var(--color-forest);
+	font-weight: 500;
+	font-size: 15px;
+	cursor: pointer;
+	transition: transform 120ms ease, background 120ms ease, border-color 120ms ease,
+		box-shadow 120ms ease;
+}
+.santa-slot:hover:not(:disabled):not([aria-checked="true"]) {
+	border-color: var(--color-forest);
+	background: #f1f7f3;
+}
+.santa-slot:active:not(:disabled) {
+	transform: scale(0.96);
+}
+.santa-slot[aria-checked="true"] {
+	background: var(--color-forest);
+	border-color: var(--color-forest);
+	color: #fff;
+	box-shadow: 0 0 0 3px rgba(245, 200, 66, 0.9);
+}
+.santa-slot:disabled {
+	cursor: not-allowed;
+	background: #eef2ef;
+	border-color: #e1e8e3;
+	color: #9aa8a0;
+	text-decoration: line-through;
+}
+.santa-slot:focus-visible,
+.santa-input:focus-visible,
+.santa-cta:focus-visible {
+	outline: 3px solid var(--color-yellow);
+	outline-offset: 2px;
+}
+
+.santa-input {
+	width: 100%;
+	min-height: 52px;
+	padding: 0 14px;
+	border-radius: 12px;
+	border: 1.5px solid var(--color-border);
+	background: #fff;
+	color: var(--color-forest);
+	/* 16px keeps iOS Safari from zooming the page on focus */
+	font-size: 16px;
+	font-family: var(--font-body);
+}
+.santa-input:focus {
+	border-color: var(--color-forest);
+}
+
+.santa-label {
+	display: block;
+	margin-bottom: 6px;
+	font-size: 13px;
+	font-weight: 500;
+	letter-spacing: 0.02em;
+	color: var(--color-muted-text);
+}
+
+.santa-bar {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 20;
+	background: rgba(255, 255, 255, 0.94);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	border-top: 3px solid var(--color-yellow);
+	padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+}
+
+.santa-cta {
+	width: 100%;
+	min-height: 54px;
+	border-radius: 14px;
+	border: 0;
+	background: var(--color-forest);
+	color: #fff;
+	font-family: var(--font-heading);
+	font-weight: 700;
+	font-size: 17px;
+	cursor: pointer;
+	transition: transform 120ms ease, background 120ms ease;
+}
+.santa-cta:hover:not(:disabled) {
+	background: var(--color-forest-deep);
+}
+.santa-cta:active:not(:disabled) {
+	transform: scale(0.98);
+}
+.santa-cta:disabled {
+	opacity: 0.55;
+	cursor: not-allowed;
+}
+
+.santa-skeleton {
+	min-height: 52px;
+	border-radius: 12px;
+	background: linear-gradient(90deg, #e8f0eb 25%, #f4f8f5 50%, #e8f0eb 75%);
+	background-size: 200% 100%;
+	animation: santa-shimmer 1.4s ease-in-out infinite;
+}
+@keyframes santa-shimmer {
+	to {
+		background-position: -200% 0;
+	}
+}
+
+.santa-pop {
+	animation: santa-pop 420ms cubic-bezier(0.2, 1.2, 0.4, 1) both;
+}
+@keyframes santa-pop {
+	from {
+		opacity: 0;
+		transform: translateY(12px) scale(0.96);
+	}
+}
+
+.santa-ticket {
+	position: relative;
+	background: #fff;
+	border-radius: 20px;
+	border: 1px solid var(--color-border);
+	box-shadow: 0 12px 32px rgba(15, 61, 39, 0.12);
+}
+.santa-ticket::before,
+.santa-ticket::after {
+	content: "";
+	position: absolute;
+	top: 58%;
+	width: 24px;
+	height: 24px;
+	border-radius: 999px;
+	background: var(--color-cream);
+	border: 1px solid var(--color-border);
+}
+.santa-ticket::before {
+	left: -13px;
+	clip-path: inset(0 0 0 50%);
+}
+.santa-ticket::after {
+	right: -13px;
+	clip-path: inset(0 50% 0 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.santa-snow,
+	.santa-skeleton,
+	.santa-pop {
+		animation: none;
+	}
+	.santa-slot,
+	.santa-cta {
+		transition: none;
+	}
+}
