@@ -15,6 +15,12 @@ export function proxy(request: NextRequest) {
   const host = request.headers.get("host") ?? "";
   const subdomain = host.split(".")[0];
 
+  // The root layout always links /favicon.ico (the PAWS mark); on a subdomain
+  // that has its own icon, answer that request with it instead.
+  if (subdomain === "santa" && request.nextUrl.pathname === "/favicon.ico") {
+    return NextResponse.rewrite(new URL("/santa/favicon.ico", request.url));
+  }
+
   const page = SUBDOMAIN_PAGES[subdomain];
   if (page && request.nextUrl.pathname === "/") {
     return NextResponse.rewrite(new URL(page, request.url));
@@ -27,5 +33,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: "/",
+  matcher: ["/", "/favicon.ico"],
 };
