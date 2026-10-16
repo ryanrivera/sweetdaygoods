@@ -1,8 +1,8 @@
 // TODO: confirm these before launch.
 export const EVENT_LABEL = "St. Columba Winter Market";
-export const EVENT_DATE_LABEL = "Saturday, December 5"; // shown on the page
+export const EVENT_DATE_LABEL = "Sunday, December 6"; // shown on the page
 export const PRICE_CENTS = 2000; // per portrait session
-export const CONTACT_EMAIL = "ryancarivera@gmail.com"; // for reschedule/cancel requests
+export const CONTACT_EMAIL = "sweetdaygoods@gmail.com"; // for reschedule/cancel requests
 
 const START_MINUTES = 9 * 60;
 const END_MINUTES = 13 * 60;

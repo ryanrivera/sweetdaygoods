@@ -226,11 +226,12 @@ export default function SantaBooking() {
 						with Santa <span aria-hidden="true">🎅</span>
 					</h1>
 					<p className="mt-3 text-[15px] leading-relaxed text-white/85">
-						Reserve a private 10-minute visit and take home a keepsake portrait.
-						Every session supports St. Columba Catholic School.
+						Reserve a 10-minute visit and walk away with a 4×6 print of your
+						portrait, ready on the spot. Every session supports St. Columba
+						Catholic School.
 					</p>
 					<div className="mt-5 flex flex-wrap gap-2 text-[13px] font-medium">
-						{[EVENT_DATE_LABEL, "9 AM – 1 PM", `${PRICE_LABEL} per session`].map((chip) => (
+						{[EVENT_DATE_LABEL, "9 AM – 1 PM", `${PRICE_LABEL} per session`, "Instant 4×6 print"].map((chip) => (
 							<span
 								key={chip}
 								style={{ backgroundColor: "rgba(255,255,255,0.14)", border: "1px solid rgba(255,255,255,0.22)" }}
