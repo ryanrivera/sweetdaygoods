@@ -241,6 +241,13 @@ export default function SantaBooking() {
 							</span>
 						))}
 					</div>
+					<p
+						style={{ borderLeft: "3px solid var(--color-yellow)", backgroundColor: "rgba(255,255,255,0.08)" }}
+						className="mt-5 rounded-r-lg py-2.5 pr-3 pl-3 text-[14px] leading-snug text-white/90"
+					>
+						<strong className="font-medium text-white">Walk-ins are welcome</strong>, but
+						reserved times are served first. Book a spot to skip the wait.
+					</p>
 				</div>
 			</section>
 
