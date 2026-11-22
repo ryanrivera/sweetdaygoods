@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Snowfall, { TwinklingDots } from "./snowfall";
 import {
 	BLOCKS,
 	CONTACT_EMAIL,
@@ -137,6 +138,7 @@ function TopDecor() {
 			<Ornament style={{ right: 16, top: 74, width: 44, transform: "rotate(8deg)" }} />
 			<Sparkle delay={0.4} style={{ left: 24, top: 150, width: 22 }} />
 			<Sparkle delay={1.6} style={{ right: 30, top: 250, width: 28 }} />
+			<Sparkle delay={0.9} style={{ left: 12, top: 330, width: 16 }} />
 		</>
 	);
 }
@@ -232,6 +234,7 @@ export default function SantaBooking() {
 	if (confirmation || returning) {
 		return (
 			<div className="santa-page">
+				<TwinklingDots />
 				<section className="relative px-6 pt-12 pb-40">
 					<TopDecor />
 					<div className="relative z-[1] mx-auto max-w-[420px]">
@@ -274,6 +277,7 @@ export default function SantaBooking() {
 						)}
 					</div>
 				</section>
+				<Snowfall />
 				<div className="santa-frame" aria-hidden="true" />
 			</div>
 		);
@@ -281,6 +285,7 @@ export default function SantaBooking() {
 
 	return (
 		<div className="santa-page">
+			<TwinklingDots />
 			<section className="relative px-6 pt-11 pb-5">
 				<TopDecor />
 
@@ -491,6 +496,7 @@ export default function SantaBooking() {
 				</div>
 			</div>
 
+			<Snowfall />
 			<div className="santa-frame" aria-hidden="true" />
 		</div>
 	);
