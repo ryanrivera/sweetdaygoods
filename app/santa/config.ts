@@ -10,9 +10,9 @@ export const SLOT_LENGTH_MINUTES = 5;
 // Santa takes photos in 45-minute blocks, then a 15-minute break.
 // Times are 24-hour "HH:MM"; `breakEnd` is when Santa is back.
 export const BLOCKS = [
-	{ start: "11:00", end: "11:45", breakEnd: "12:00" },
-	{ start: "12:00", end: "12:45", breakEnd: "13:00" },
-	{ start: "13:00", end: "13:45", breakEnd: "14:00" },
+	{ title: "Morning Magic", start: "11:00", end: "11:45", breakEnd: "12:00" },
+	{ title: "Midday Merriment", start: "12:00", end: "12:45", breakEnd: "13:00" },
+	{ title: "Afternoon Joy", start: "13:00", end: "13:45", breakEnd: "14:00" },
 ] as const;
 
 const toMinutes = (hhmm: string) => {
@@ -45,11 +45,6 @@ export function formatSlot(id: string): string {
 	return `${hour}:${String(m).padStart(2, "0")} ${suffix}`;
 }
 
-/** "11:45" -> "11:45 AM", but 12:00 -> "noon" for friendlier ranges. */
-function formatRangeEdge(id: string) {
-	return id === "12:00" ? "noon" : formatSlot(id);
-}
-
 /** "11:00–11:45 AM" style label for a block. */
 export function formatBlock(block: { start: string; end: string }) {
 	const start = formatSlot(block.start);
@@ -59,8 +54,4 @@ export function formatBlock(block: { start: string; end: string }) {
 	return startSuffix === endSuffix
 		? `${startTime}–${end}`
 		: `${start}–${end}`;
-}
-
-export function formatBreak(block: { end: string; breakEnd: string }) {
-	return `${formatSlot(block.end)} – ${formatRangeEdge(block.breakEnd)}`;
 }

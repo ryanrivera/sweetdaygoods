@@ -13,7 +13,6 @@ import {
 	SLOT_IDS,
 	SLOT_LENGTH_MINUTES,
 	formatBlock,
-	formatBreak,
 	formatSlot,
 } from "./config";
 
@@ -359,7 +358,10 @@ export default function SantaBooking() {
 					<div role="radiogroup" aria-label="Available times">
 						{SLOT_GROUPS.map((group, i) => (
 							<div key={group.start} className={i === 0 ? "mt-4" : "mt-6"}>
-								<h3 className="santa-block-title">{formatBlock(group)}</h3>
+								<h3 className="santa-block-title">
+									<span>{group.title}</span>
+									<span className="santa-block-time">{formatBlock(group)}</span>
+								</h3>
 								<div className="grid grid-cols-3 gap-2.5">
 									{group.slots.map((slot) =>
 										taken === null ? (
@@ -383,9 +385,6 @@ export default function SantaBooking() {
 										),
 									)}
 								</div>
-								<p className="santa-break">
-									<span aria-hidden="true">🎅</span> Santa break · {formatBreak(group)}
-								</p>
 							</div>
 						))}
 					</div>

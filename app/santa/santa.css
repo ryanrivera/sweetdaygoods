@@ -230,27 +230,16 @@
 	letter-spacing: 0.06em;
 	text-transform: uppercase;
 }
+.santa-block-time {
+	color: var(--ink-soft);
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	text-transform: none;
+}
 .santa-block-title::after {
 	content: "";
 	flex: 1;
 	border-top: 2px dotted var(--line);
-}
-
-.santa-break {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 8px;
-	margin-top: 16px;
-	color: var(--ink-soft);
-	font-size: 13px;
-	font-weight: 500;
-}
-.santa-break::before,
-.santa-break::after {
-	content: "";
-	flex: 1;
-	border-top: 2px dashed var(--line);
 }
 
 .santa-slot {
