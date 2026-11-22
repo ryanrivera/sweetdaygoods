@@ -18,7 +18,8 @@ import {
 
 type Confirmation = { slot: string; name: string };
 
-const PRICE_LABEL = `$${(PRICE_CENTS / 100).toFixed(2)}`;
+// "$25" for whole dollars, "$25.50" otherwise
+const PRICE_LABEL = `$${(PRICE_CENTS / 100).toFixed(PRICE_CENTS % 100 === 0 ? 0 : 2)}`;
 const HOURS_LABEL = `${formatSlot(BLOCKS[0].start)} – ${formatSlot(BLOCKS[BLOCKS.length - 1].breakEnd)}`;
 // "Sunday, December 6" -> "Sunday • December 6" (uppercased in CSS)
 const DATE_BANNER = EVENT_DATE_LABEL.replace(", ", " • ");
@@ -296,8 +297,6 @@ export default function SantaBooking() {
 						style={{ color: "var(--cream)", textShadow: "0 2px 0 rgba(15,90,70,0.45)" }}
 					>
 						Smile for Santa!
-						<br />
-						Instant 4×6 print
 					</p>
 
 					<div className="mt-6" aria-hidden="true">
@@ -324,7 +323,20 @@ export default function SantaBooking() {
 						<Ornament style={{ left: -18, top: -4, width: 34, transform: "rotate(-10deg)" }} />
 						<Snowflake style={{ right: -10, top: 6, width: 28 }} />
 						<p className="mx-auto max-w-[270px] text-[18px] leading-snug font-semibold" style={{ color: "var(--ink-dark)" }}>
-							Reserve a {SLOT_LENGTH_MINUTES}-minute visit and take home a 4×6 print on the spot!
+							Reserve your time with Santa and take home a photo on the spot!
+						</p>
+					</div>
+
+					<div className="santa-price mt-5">
+						<div className="santa-price-seal" aria-hidden="true">
+							{PRICE_LABEL}
+						</div>
+						<p className="text-left text-[17px] leading-tight font-bold" style={{ color: "var(--ink-dark)" }}>
+							<span className="sr-only">Price: {PRICE_LABEL}. </span>
+							per {SLOT_LENGTH_MINUTES}-minute visit
+							<span className="mt-0.5 block text-[14px] font-semibold" style={{ color: "var(--ink)" }}>
+								Instant 4×6 print included
+							</span>
 						</p>
 					</div>
 
@@ -346,13 +358,17 @@ export default function SantaBooking() {
 						<h2 className="text-[22px] font-bold">Pick a time</h2>
 					</div>
 					<p className="mt-2 text-[15px] font-medium" style={{ color: "var(--ink-soft)" }} aria-live="polite">
+						<strong className="font-bold" style={{ color: "var(--red)" }}>
+							{PRICE_LABEL} per visit
+						</strong>
+						{" · "}
 						{loadError
 							? "Couldn't load times — please refresh."
 							: left === null
 								? "Loading times…"
 								: left === 0
 									? "All times are booked. Thank you for the support!"
-									: `${left} of ${SLOT_IDS.length} times left · ${PRICE_LABEL} per visit`}
+									: `${left} of ${SLOT_IDS.length} times left`}
 					</p>
 
 					<div role="radiogroup" aria-label="Available times">
@@ -489,7 +505,7 @@ export default function SantaBooking() {
 						{submitting
 							? "Holding your time…"
 							: selected
-								? `Continue to payment · ${formatSlot(selected)}`
+								? `Pay ${PRICE_LABEL} · ${formatSlot(selected)}`
 								: "Choose a time to continue"}
 					</button>
 				</div>

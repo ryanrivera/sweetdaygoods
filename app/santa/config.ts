@@ -1,8 +1,7 @@
-// TODO: confirm the price before launch.
 export const EVENT_LABEL = "St. Columba Christmas Market";
 export const EVENT_DATE_LABEL = "Sunday, December 6"; // shown on the page
 export const EVENT_ADDRESS = "3365 Glencolum Drive";
-export const PRICE_CENTS = 2000; // per portrait session
+export const PRICE_CENTS = 2500; // per portrait session; also what Stripe charges
 export const CONTACT_EMAIL = "sweetdaygoods@gmail.com"; // for reschedule/cancel requests
 
 export const SLOT_LENGTH_MINUTES = 5;
