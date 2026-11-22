@@ -54,3 +54,9 @@ export function formatBlock(block: { start: string; end: string }) {
 		? `${startTime}–${end}`
 		: `${start}–${end}`;
 }
+
+/** "$25" for whole dollars, "$25.50" otherwise. */
+export const PRICE_LABEL = `$${(PRICE_CENTS / 100).toFixed(PRICE_CENTS % 100 === 0 ? 0 : 2)}`;
+
+/** "11:00 AM – 2:00 PM": when Santa is at the market. */
+export const HOURS_LABEL = `${formatSlot(BLOCKS[0].start)} – ${formatSlot(BLOCKS[BLOCKS.length - 1].breakEnd)}`;

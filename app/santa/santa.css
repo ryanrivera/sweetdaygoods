@@ -429,6 +429,82 @@
 .santa-ticket-divider::before { left: -13px; }
 .santa-ticket-divider::after { right: -13px; }
 
+/* Collapsible FAQ / Terms (native <details>) */
+.santa-collapse > summary,
+.santa-faq > summary {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	cursor: pointer;
+	list-style: none;
+	color: var(--ink-dark);
+}
+.santa-collapse > summary::-webkit-details-marker,
+.santa-faq > summary::-webkit-details-marker {
+	display: none;
+}
+.santa-collapse > summary::after,
+.santa-faq > summary::after {
+	content: "+";
+	flex: none;
+	display: grid;
+	place-items: center;
+	width: 28px;
+	height: 28px;
+	border-radius: 999px;
+	background: var(--red);
+	color: #fff;
+	font-weight: 700;
+	font-size: 20px;
+	line-height: 1;
+}
+.santa-collapse[open] > summary::after,
+.santa-faq[open] > summary::after {
+	content: "–";
+}
+.santa-collapse > summary {
+	min-height: 56px;
+	padding: 0 18px;
+	font-family: var(--font-alfa), serif;
+	font-size: 20px;
+	letter-spacing: 0.02em;
+}
+.santa-collapse > summary:focus-visible,
+.santa-faq > summary:focus-visible {
+	outline: 3px solid var(--red);
+	outline-offset: 2px;
+	border-radius: 14px;
+}
+.santa-collapse-body {
+	padding: 0 18px 14px;
+	color: var(--ink);
+	font-size: 15px;
+	line-height: 1.5;
+}
+.santa-faq {
+	border-top: 2px dotted var(--line);
+}
+.santa-faq > summary {
+	min-height: 52px;
+	padding: 8px 0;
+	font-weight: 600;
+	font-size: 15px;
+}
+.santa-faq > p,
+.santa-term p {
+	margin: 0 0 12px;
+}
+.santa-term {
+	border-top: 2px dotted var(--line);
+	padding-top: 12px;
+}
+.santa-term h3 {
+	margin: 0 0 2px;
+	font-weight: 600;
+	color: var(--ink-dark);
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.santa-twinkle,
 	.santa-dots-layer,

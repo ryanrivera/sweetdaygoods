@@ -2,13 +2,14 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Snowfall, { TwinklingDots } from "./snowfall";
+import { FAQS, TERMS } from "./content";
 import {
-	BLOCKS,
 	CONTACT_EMAIL,
 	EVENT_ADDRESS,
 	EVENT_DATE_LABEL,
 	EVENT_LABEL,
-	PRICE_CENTS,
+	HOURS_LABEL,
+	PRICE_LABEL,
 	SLOT_GROUPS,
 	SLOT_IDS,
 	SLOT_LENGTH_MINUTES,
@@ -18,9 +19,6 @@ import {
 
 type Confirmation = { slot: string; name: string };
 
-// "$25" for whole dollars, "$25.50" otherwise
-const PRICE_LABEL = `$${(PRICE_CENTS / 100).toFixed(PRICE_CENTS % 100 === 0 ? 0 : 2)}`;
-const HOURS_LABEL = `${formatSlot(BLOCKS[0].start)} – ${formatSlot(BLOCKS[BLOCKS.length - 1].breakEnd)}`;
 // "Sunday, December 6" -> "Sunday • December 6" (uppercased in CSS)
 const DATE_BANNER = EVENT_DATE_LABEL.replace(", ", " • ");
 
@@ -474,6 +472,32 @@ export default function SantaBooking() {
 					</div>
 				</section>
 			</form>
+
+			<div className="relative mx-auto mt-6 max-w-[460px] space-y-4 px-5">
+				<details className="santa-collapse santa-card">
+					<summary>FAQs</summary>
+					<div className="santa-collapse-body">
+						{FAQS.map((faq) => (
+							<details key={faq.question} className="santa-faq">
+								<summary>{faq.question}</summary>
+								<p>{faq.answer}</p>
+							</details>
+						))}
+					</div>
+				</details>
+
+				<details className="santa-collapse santa-card">
+					<summary>Terms &amp; Conditions</summary>
+					<div className="santa-collapse-body">
+						{TERMS.map((term) => (
+							<div key={term.title} className="santa-term">
+								<h3>{term.title}</h3>
+								<p>{term.body}</p>
+							</div>
+						))}
+					</div>
+				</details>
+			</div>
 
 			<footer className="relative px-6 pt-8 pb-44 text-center">
 				<PineBranch style={{ left: -18, bottom: 64, width: 130, transform: "scaleY(-1) rotate(8deg)" }} />
