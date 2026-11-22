@@ -1,113 +1,221 @@
+/* Look and feel follows the St. Columba Christmas Market flyer:
+   teal field, cream ribbons with red tails, red ornaments, pine sprigs. */
 .santa-page {
-	--font-heading: var(--font-arvo), serif;
-	--font-body: var(--font-roboto), sans-serif;
-	--color-forest: #0f3d27;
-	--color-forest-deep: #0a2b1b;
-	--color-yellow: #f5c842;
-	--color-cream: #f7faf8;
-	--color-mint: #d4e8da;
-	--color-muted-text: #5a6b60;
-	--color-border: #c8d8cc;
-	--color-berry: #b3261e;
-	font-family: var(--font-body);
-	background: var(--color-cream);
-	color: var(--color-forest);
+	--font-display: var(--font-alfa), serif;
+	--font-body: var(--font-fredoka), system-ui, sans-serif;
+	--teal: #42d6b6;
+	--teal-deep: #26b394;
+	--cream: #fcf5d9;
+	--cream-card: #fffaea;
+	--red: #e8262a;
+	--red-deep: #a8181c;
+	--ink: #1d5b45;
+	--ink-dark: #0e4030; /* darker green for small text on the teal */
+	--ink-soft: #4b7a68;
+	--line: #bfe6d9;
+	position: relative;
+	overflow-x: hidden;
 	min-height: 100vh;
 	min-height: 100dvh;
+	font-family: var(--font-body);
+	color: var(--ink);
 	-webkit-tap-highlight-color: transparent;
+	background-color: var(--teal);
+	/* scattered snow dots, like the flyer */
+	background-image:
+		radial-gradient(circle, rgba(255, 255, 255, 0.8) 1.6px, transparent 2.2px),
+		radial-gradient(circle, rgba(255, 255, 255, 0.55) 1.2px, transparent 1.8px),
+		radial-gradient(circle, rgba(255, 255, 255, 0.7) 2px, transparent 2.6px);
+	background-size: 137px 151px, 89px 97px, 211px 233px;
+	background-position: 12px 20px, 50px 70px, 100px 10px;
+}
+
+/* Scalloped cream frame around the whole page */
+.santa-frame {
+	position: absolute;
+	inset: 0;
+	z-index: 30;
+	pointer-events: none;
+	border: 6px solid var(--cream);
+	background:
+		radial-gradient(circle at 9px 0, var(--cream) 8px, transparent 8.5px) top left / 18px 14px repeat-x,
+		radial-gradient(circle at 9px 14px, var(--cream) 8px, transparent 8.5px) bottom left / 18px 14px repeat-x,
+		radial-gradient(circle at 0 9px, var(--cream) 8px, transparent 8.5px) top left / 14px 18px repeat-y,
+		radial-gradient(circle at 14px 9px, var(--cream) 8px, transparent 8.5px) top right / 14px 18px repeat-y;
 }
 
 .santa-page h1,
 .santa-page h2,
 .santa-page h3 {
-	font-family: var(--font-heading);
+	font-family: var(--font-body);
 }
 
-/* Soft falling-snow texture for the hero */
-.santa-hero {
-	position: relative;
-	overflow: hidden;
-	background:
-		radial-gradient(circle at 85% 0%, rgba(245, 200, 66, 0.18), transparent 45%),
-		linear-gradient(180deg, var(--color-forest) 0%, var(--color-forest-deep) 100%);
-}
-.santa-snow {
+.santa-deco {
 	position: absolute;
-	inset: 0;
 	pointer-events: none;
-	background-image:
-		radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.7), transparent),
-		radial-gradient(2px 2px at 90px 80px, rgba(255, 255, 255, 0.55), transparent),
-		radial-gradient(3px 3px at 150px 20px, rgba(255, 255, 255, 0.5), transparent),
-		radial-gradient(2px 2px at 200px 120px, rgba(255, 255, 255, 0.65), transparent),
-		radial-gradient(2px 2px at 60px 150px, rgba(255, 255, 255, 0.45), transparent);
-	background-size: 240px 180px;
-	animation: santa-snow 18s linear infinite;
+	z-index: 0;
 }
-@keyframes santa-snow {
-	to {
-		background-position: 40px 180px;
-	}
+
+@keyframes santa-twinkle {
+	0%, 100% { opacity: 1; transform: scale(1); }
+	50% { opacity: 0.45; transform: scale(0.8); }
+}
+.santa-twinkle {
+	animation: santa-twinkle 3.2s ease-in-out infinite;
+}
+
+/* Ribbon: cream band, swallowtail ends, red tail peeking out behind */
+.santa-ribbon {
+	position: relative;
+	transform: rotate(var(--tilt, -3deg));
+	filter: drop-shadow(0 4px 0 rgba(15, 90, 70, 0.28));
+}
+.santa-ribbon::before {
+	content: "";
+	position: absolute;
+	left: -16px;
+	right: -16px;
+	top: 12px;
+	bottom: -12px;
+	background: var(--red);
+	clip-path: polygon(0 0, 100% 0, calc(100% - 18px) 50%, 100% 100%, 0 100%, 18px 50%);
+}
+.santa-ribbon-body {
+	position: relative;
+	background: var(--cream);
+	clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 50%, 100% 100%, 0 100%, 12px 50%);
+	padding: 8px 26px;
+	text-align: center;
+}
+
+.santa-title {
+	font-family: var(--font-display);
+	color: var(--red);
+	line-height: 1;
+	letter-spacing: 0.03em;
+	-webkit-text-stroke: 5px var(--ink);
+	paint-order: stroke fill;
+	text-shadow: 2px 3px 0 var(--ink);
+}
+
+.santa-banner {
+	position: relative;
+	background: var(--red);
+	color: var(--cream);
+	clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 50%, 100% 100%, 0 100%, 14px 50%);
+	padding: 12px 28px;
+	text-align: center;
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+}
+
+.santa-outline {
+	color: var(--cream);
+	font-weight: 600;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	-webkit-text-stroke: 4px var(--red);
+	paint-order: stroke fill;
 }
 
 .santa-card {
-	background: #fff;
-	border: 1px solid var(--color-border);
-	border-radius: 18px;
-	box-shadow: 0 1px 2px rgba(15, 61, 39, 0.05), 0 8px 24px rgba(15, 61, 39, 0.06);
+	position: relative;
+	z-index: 1;
+	background: var(--cream-card);
+	border-radius: 22px;
+	box-shadow: 0 5px 0 rgba(15, 90, 70, 0.3);
 }
 
 .santa-step {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 28px;
-	height: 28px;
+	width: 32px;
+	height: 32px;
 	border-radius: 999px;
-	background: var(--color-forest);
-	color: var(--color-yellow);
-	font-family: var(--font-heading);
+	background: var(--red);
+	color: var(--cream);
+	font-family: var(--font-display);
+	font-size: 16px;
+	flex-shrink: 0;
+	box-shadow: 0 2px 0 var(--red-deep);
+}
+
+.santa-block-title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 8px;
+	color: var(--red);
 	font-weight: 700;
 	font-size: 14px;
-	flex-shrink: 0;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+.santa-block-title::after {
+	content: "";
+	flex: 1;
+	border-top: 2px dotted var(--line);
+}
+
+.santa-break {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	margin-top: 16px;
+	color: var(--ink-soft);
+	font-size: 13px;
+	font-weight: 500;
+}
+.santa-break::before,
+.santa-break::after {
+	content: "";
+	flex: 1;
+	border-top: 2px dashed var(--line);
 }
 
 .santa-slot {
-	min-height: 52px;
-	border-radius: 12px;
-	border: 1.5px solid var(--color-border);
+	min-height: 50px;
+	border-radius: 13px;
+	border: 2px solid var(--line);
 	background: #fff;
-	color: var(--color-forest);
-	font-weight: 500;
-	font-size: 15px;
+	color: var(--ink);
+	font-family: var(--font-body);
+	font-weight: 600;
+	font-size: 16px;
 	cursor: pointer;
-	transition: transform 120ms ease, background 120ms ease, border-color 120ms ease,
-		box-shadow 120ms ease;
+	box-shadow: 0 3px 0 var(--line);
+	transition: transform 100ms ease, background 100ms ease, border-color 100ms ease,
+		box-shadow 100ms ease;
 }
 .santa-slot:hover:not(:disabled):not([aria-checked="true"]) {
-	border-color: var(--color-forest);
-	background: #f1f7f3;
+	border-color: var(--teal-deep);
+	box-shadow: 0 3px 0 var(--teal-deep);
 }
 .santa-slot:active:not(:disabled) {
-	transform: scale(0.96);
+	transform: translateY(2px);
+	box-shadow: 0 1px 0 var(--line);
 }
 .santa-slot[aria-checked="true"] {
-	background: var(--color-forest);
-	border-color: var(--color-forest);
-	color: #fff;
-	box-shadow: 0 0 0 3px rgba(245, 200, 66, 0.9);
+	background: var(--red);
+	border-color: var(--red-deep);
+	color: var(--cream);
+	box-shadow: 0 3px 0 var(--red-deep);
 }
 .santa-slot:disabled {
 	cursor: not-allowed;
-	background: #eef2ef;
-	border-color: #e1e8e3;
-	color: #9aa8a0;
+	background: transparent;
+	border-style: dashed;
+	box-shadow: none;
+	color: #a7bdb3;
 	text-decoration: line-through;
 }
 .santa-slot:focus-visible,
 .santa-input:focus-visible,
 .santa-cta:focus-visible {
-	outline: 3px solid var(--color-yellow);
+	outline: 3px solid var(--red);
 	outline-offset: 2px;
 }
 
@@ -115,25 +223,27 @@
 	width: 100%;
 	min-height: 52px;
 	padding: 0 14px;
-	border-radius: 12px;
-	border: 1.5px solid var(--color-border);
+	border-radius: 13px;
+	border: 2px solid var(--line);
 	background: #fff;
-	color: var(--color-forest);
+	color: var(--ink);
 	/* 16px keeps iOS Safari from zooming the page on focus */
 	font-size: 16px;
 	font-family: var(--font-body);
 }
 .santa-input:focus {
-	border-color: var(--color-forest);
+	border-color: var(--teal-deep);
+}
+.santa-input::placeholder {
+	color: #9cb8ac;
 }
 
 .santa-label {
 	display: block;
 	margin-bottom: 6px;
-	font-size: 13px;
-	font-weight: 500;
-	letter-spacing: 0.02em;
-	color: var(--color-muted-text);
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--ink);
 }
 
 .santa-bar {
@@ -141,90 +251,93 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-	z-index: 20;
-	background: rgba(255, 255, 255, 0.94);
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
-	border-top: 3px solid var(--color-yellow);
-	padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+	z-index: 40;
+	background: var(--teal);
+	border-top: 4px solid var(--cream);
+	padding: 12px 20px calc(14px + env(safe-area-inset-bottom));
 }
 
 .santa-cta {
 	width: 100%;
-	min-height: 54px;
-	border-radius: 14px;
+	min-height: 56px;
+	border-radius: 16px;
 	border: 0;
-	background: var(--color-forest);
-	color: #fff;
-	font-family: var(--font-heading);
+	background: var(--red);
+	color: var(--cream);
+	font-family: var(--font-body);
 	font-weight: 700;
-	font-size: 17px;
+	font-size: 18px;
+	letter-spacing: 0.02em;
 	cursor: pointer;
-	transition: transform 120ms ease, background 120ms ease;
+	box-shadow: 0 4px 0 var(--red-deep);
+	transition: transform 100ms ease, box-shadow 100ms ease, filter 100ms ease;
 }
 .santa-cta:hover:not(:disabled) {
-	background: var(--color-forest-deep);
+	filter: brightness(1.06);
 }
 .santa-cta:active:not(:disabled) {
-	transform: scale(0.98);
+	transform: translateY(3px);
+	box-shadow: 0 1px 0 var(--red-deep);
 }
 .santa-cta:disabled {
-	opacity: 0.55;
+	opacity: 0.6;
 	cursor: not-allowed;
+}
+.santa-cta-error {
+	margin-bottom: 8px;
+	text-align: center;
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--cream);
+	background: var(--red-deep);
+	border-radius: 10px;
+	padding: 6px 10px;
 }
 
 .santa-skeleton {
-	min-height: 52px;
-	border-radius: 12px;
-	background: linear-gradient(90deg, #e8f0eb 25%, #f4f8f5 50%, #e8f0eb 75%);
+	min-height: 50px;
+	border-radius: 13px;
+	background: linear-gradient(90deg, #eef6f1 25%, #fbfdfb 50%, #eef6f1 75%);
 	background-size: 200% 100%;
 	animation: santa-shimmer 1.4s ease-in-out infinite;
 }
 @keyframes santa-shimmer {
-	to {
-		background-position: -200% 0;
-	}
+	to { background-position: -200% 0; }
 }
 
 .santa-pop {
 	animation: santa-pop 420ms cubic-bezier(0.2, 1.2, 0.4, 1) both;
 }
 @keyframes santa-pop {
-	from {
-		opacity: 0;
-		transform: translateY(12px) scale(0.96);
-	}
+	from { opacity: 0; transform: translateY(12px) scale(0.96); }
 }
 
 .santa-ticket {
 	position: relative;
-	background: #fff;
-	border-radius: 20px;
-	border: 1px solid var(--color-border);
-	box-shadow: 0 12px 32px rgba(15, 61, 39, 0.12);
+	z-index: 1;
+	background: var(--cream-card);
+	border-radius: 22px;
+	box-shadow: 0 6px 0 rgba(15, 90, 70, 0.3);
 }
-.santa-ticket::before,
-.santa-ticket::after {
+.santa-ticket-divider {
+	position: relative;
+	border-top: 3px dashed var(--line);
+}
+.santa-ticket-divider::before,
+.santa-ticket-divider::after {
 	content: "";
 	position: absolute;
-	top: 58%;
-	width: 24px;
-	height: 24px;
+	top: -15px;
+	width: 26px;
+	height: 26px;
 	border-radius: 999px;
-	background: var(--color-cream);
-	border: 1px solid var(--color-border);
+	background: var(--teal);
 }
-.santa-ticket::before {
-	left: -13px;
-	clip-path: inset(0 0 0 50%);
-}
-.santa-ticket::after {
-	right: -13px;
-	clip-path: inset(0 50% 0 0);
-}
+.santa-ticket-divider::before { left: -13px; }
+.santa-ticket-divider::after { right: -13px; }
 
 @media (prefers-reduced-motion: reduce) {
-	.santa-snow,
+	.santa-twinkle,
 	.santa-skeleton,
 	.santa-pop {
 		animation: none;

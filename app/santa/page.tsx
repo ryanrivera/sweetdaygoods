@@ -1,18 +1,17 @@
-import { Arvo, Roboto } from "next/font/google";
+import { Alfa_Slab_One, Fredoka } from "next/font/google";
 import type { Metadata, Viewport } from "next";
 import SantaBooking from "./santa-booking";
 import "./santa.css";
 
-const arvo = Arvo({
+const alfa = Alfa_Slab_One({
 	subsets: ["latin"],
-	weight: ["400", "700"],
-	variable: "--font-arvo",
+	weight: "400",
+	variable: "--font-alfa",
 });
 
-const roboto = Roboto({
+const fredoka = Fredoka({
 	subsets: ["latin"],
-	weight: ["300", "400", "500"],
-	variable: "--font-roboto",
+	variable: "--font-fredoka",
 });
 
 // Santa-themed icons (emoji art: Twemoji by Twitter/jdecked, CC-BY 4.0,
@@ -27,18 +26,18 @@ export const metadata: Metadata = {
 		],
 		apple: [{ url: "/santa/apple-icon.png", sizes: "180x180" }],
 	},
-	title: "Portraits with Santa — St. Columba Winter Market",
+	title: "Photos with Santa — St. Columba Christmas Market",
 	description:
-		"Reserve a 10-minute time slot for a portrait with Santa at the St. Columba Winter Market and take home an instant 4x6 print. Proceeds benefit St. Columba Catholic School.",
+		"Reserve a 5-minute time slot for a photo with Santa at the St. Columba Christmas Market and take home an instant 4x6 print. Proceeds benefit St. Columba Catholic School.",
 };
 
 export const viewport: Viewport = {
-	themeColor: "#0f3d27",
+	themeColor: "#42d6b6",
 };
 
 export default function Page() {
 	return (
-		<div className={`${arvo.variable} ${roboto.variable} flex-1`}>
+		<div className={`${alfa.variable} ${fredoka.variable} flex-1`}>
 			<SantaBooking />
 		</div>
 	);
