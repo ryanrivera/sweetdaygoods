@@ -95,6 +95,20 @@ function Sparkle({ style, delay = 0 }: { style?: React.CSSProperties; delay?: nu
 	);
 }
 
+function Snowflake({ style }: { style?: React.CSSProperties }) {
+	return (
+		<svg className="santa-deco" viewBox="0 0 40 40" aria-hidden="true" style={style} fill="none">
+			<g stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+				{[0, 60, 120].map((deg) => (
+					<g key={deg} transform={`rotate(${deg} 20 20)`}>
+						<path d="M20 3V37M14 9l6 5 6-5M14 31l6-5 6 5" />
+					</g>
+				))}
+			</g>
+		</svg>
+	);
+}
+
 function Ribbon({
 	tilt,
 	children,
@@ -270,25 +284,46 @@ export default function SantaBooking() {
 	return (
 		<div className="santa-page">
 			<TwinklingDots />
-			<section className="relative">
-				<h1 className="sr-only">Photos with Santa at the {EVENT_LABEL}</h1>
+			<section className="relative px-6 pt-11 pb-5">
+				<TopDecor />
 
-				{/* Flyer artwork (cropped from the flyer file) with live text on the ribbons */}
-				<div className="santa-art" aria-hidden="true">
-					<p className="santa-art-church">
-						St. Columba Catholic Community
-						<br />
-						Family &amp; Friends
+				<div className="relative z-[1] mx-auto max-w-[420px] text-center">
+					<h1 className="sr-only">Photos with Santa at the {EVENT_LABEL}</h1>
+					<p
+						aria-hidden="true"
+						className="text-[17px] leading-tight font-bold tracking-[0.1em] uppercase"
+						style={{ color: "var(--cream)", textShadow: "0 2px 0 rgba(15,90,70,0.45)" }}
+					>
+						Smile for Santa!
 					</p>
-					<p className="santa-title santa-art-title santa-art-title-1">SANTA</p>
-					<p className="santa-title santa-art-title santa-art-title-2">PHOTOS</p>
-					<p className="santa-art-date">{DATE_BANNER}</p>
-				</div>
 
-				<div className="relative z-[1] mx-auto max-w-[420px] px-6 pb-5 text-center">
-					<p className="mx-auto max-w-[290px] text-[18px] leading-snug font-semibold" style={{ color: "var(--ink-dark)" }}>
-						Reserve your time with Santa and take home a photo on the spot!
-					</p>
+					<div className="mt-6" aria-hidden="true">
+						<Ribbon tilt={-3}>
+							<p className="text-[17px] leading-tight font-semibold" style={{ color: "var(--ink)" }}>
+								St. Columba Catholic Community
+								<br />
+								Family &amp; Friends
+							</p>
+						</Ribbon>
+					</div>
+					<div className="mt-6" aria-hidden="true">
+						<Ribbon tilt={2}>
+							<p className="santa-title text-[46px]">SANTA</p>
+						</Ribbon>
+					</div>
+					<div className="mt-6" aria-hidden="true">
+						<Ribbon tilt={-2}>
+							<p className="santa-title text-[46px]">PHOTOS</p>
+						</Ribbon>
+					</div>
+
+					<div className="relative mt-8">
+						<Ornament style={{ left: -18, top: -4, width: 34, transform: "rotate(-10deg)" }} />
+						<Snowflake style={{ right: -10, top: 6, width: 28 }} />
+						<p className="mx-auto max-w-[270px] text-[18px] leading-snug font-semibold" style={{ color: "var(--ink-dark)" }}>
+							Reserve your time with Santa and take home a photo on the spot!
+						</p>
+					</div>
 
 					<div className="santa-price mt-5">
 						<div className="santa-price-seal" aria-hidden="true">
@@ -303,11 +338,14 @@ export default function SantaBooking() {
 						</p>
 					</div>
 
-					<p className="santa-outline mt-5 text-[19px] leading-tight">
+					<div className="santa-banner mt-5 text-[21px]">{DATE_BANNER}</div>
+
+					<p className="santa-outline mt-4 text-[19px] leading-tight">
 						{EVENT_ADDRESS}
 						<br />
 						Santa {HOURS_LABEL}
 					</p>
+
 				</div>
 			</section>
 

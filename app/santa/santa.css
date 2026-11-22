@@ -3,7 +3,7 @@
 .santa-page {
 	--font-display: var(--font-alfa), serif;
 	--font-body: var(--font-fredoka), system-ui, sans-serif;
-	--teal: #45d2ac; /* sampled from the flyer artwork */
+	--teal: #42d6b6;
 	--teal-deep: #26b394;
 	--cream: #fcf5d9;
 	--cream-card: #fffaea;
@@ -173,62 +173,6 @@
 	-webkit-text-stroke: 5px var(--ink);
 	paint-order: stroke fill;
 	text-shadow: 2px 3px 0 var(--ink);
-}
-
-/* Hero: the flyer's own artwork (ribbons, ornaments, pine) with live text on
-   top. Positions are % of the 1060x1215 image; sizes use cqw so the text
-   scales with the artwork. */
-.santa-art {
-	position: relative;
-	container-type: inline-size;
-	max-width: 560px;
-	margin: 0 auto;
-	aspect-ratio: 1060 / 1125;
-	background: url("/santa/flyer-hero.jpg?v=2") center top / 100% 100% no-repeat;
-	-webkit-mask-image: linear-gradient(to bottom, #000 94%, transparent);
-	mask-image: linear-gradient(to bottom, #000 94%, transparent);
-}
-.santa-art > p {
-	position: absolute;
-	margin: 0;
-	text-align: center;
-	white-space: nowrap;
-	transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
-}
-.santa-art-church {
-	left: 48%;
-	top: 19.2%;
-	--rot: -11deg;
-	color: var(--ink);
-	font-weight: 600;
-	font-size: 4.3cqw;
-	line-height: 1.15;
-}
-.santa-art-title {
-	font-size: 12.5cqw;
-	-webkit-text-stroke: 1cqw var(--ink);
-	text-shadow: 0.4cqw 0.6cqw 0 var(--ink);
-}
-.santa-art-title-1 {
-	left: 51%;
-	top: 38.9%;
-	--rot: -12deg;
-}
-.santa-art-title-2 {
-	left: 50%;
-	top: 59.6%;
-	--rot: -13deg;
-	font-size: 11.5cqw;
-}
-/* the red banner under the ribbons */
-.santa-art-date {
-	left: 49.8%;
-	top: 90.2%;
-	color: var(--cream);
-	font-weight: 700;
-	font-size: 4.6cqw;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
 }
 
 /* Price: a big red seal next to the "per visit" line */
