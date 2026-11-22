@@ -31,17 +31,17 @@ function makeFlakes(count: number): Flake[] {
 	return Array.from({ length: count }, () => {
 		const size = Math.round(between(8, 28));
 		// Bigger flakes are "closer", so they fall a bit faster.
-		const fall = 16 - ((size - 8) / 20) * 7 + between(-2, 3);
+		const fall = 30 - ((size - 8) / 20) * 12 + between(-3, 5);
 		return {
 			x: between(-2, 100),
 			size,
 			fall,
 			delay: -between(0, fall),
 			sway: between(12, 46),
-			swayDuration: between(3, 7),
-			swayDelay: -between(0, 6),
+			swayDuration: between(5, 10),
+			swayDelay: -between(0, 10),
 			spin: (rand() < 0.5 ? -1 : 1) * between(180, 540),
-			spinDuration: between(5, 14),
+			spinDuration: between(9, 24),
 			opacity: between(0.45, 0.9),
 			dot: size < 14, // small flakes are round; bigger ones show the crystal
 		};
