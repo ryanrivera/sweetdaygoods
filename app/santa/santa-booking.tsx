@@ -9,6 +9,7 @@ import {
 	EVENT_DATE_LABEL,
 	EVENT_LABEL,
 	HOURS_LABEL,
+	MAP_URL,
 	PRICE_LABEL,
 	SLOT_GROUPS,
 	SLOT_IDS,
@@ -256,7 +257,17 @@ export default function SantaBooking() {
 									<div className="space-y-1 px-6 py-5 text-center">
 										<div className="text-[17px] font-semibold">{confirmation.name}</div>
 										<div className="text-sm" style={{ color: "var(--ink-soft)" }}>
-											{EVENT_LABEL} · {EVENT_ADDRESS}
+											{EVENT_LABEL}
+											<br />
+											<a
+												className="font-semibold underline"
+												style={{ color: "var(--ink)" }}
+												href={MAP_URL}
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												{EVENT_ADDRESS}
+											</a>
 										</div>
 									</div>
 								</div>

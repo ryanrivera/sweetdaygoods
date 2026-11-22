@@ -1,6 +1,8 @@
 export const EVENT_LABEL = "St. Columba Christmas Market";
 export const EVENT_DATE_LABEL = "Sunday, December 6"; // shown on the page
 export const EVENT_ADDRESS = "3365 Glencolum Drive";
+/** Opens the user's maps app (Google Maps link works on iOS and Android). */
+export const MAP_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("3365 Glencolum Drive, San Diego, CA")}`;
 export const PRICE_CENTS = 2500; // per portrait session; also what Stripe charges
 export const CONTACT_EMAIL = "sweetdaygoods@gmail.com"; // for reschedule/cancel requests
 
